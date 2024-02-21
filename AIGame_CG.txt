@@ -1,0 +1,6598 @@
+//
+//  main.cpp
+//
+//  Created by Omniah H. Nagoor on 06/03/1445 AH.
+//  Copyright © 2023 Omniah H. Nagoor. All rights reserved.
+
+//for transbercty
+// glEnable(GL_BLEND);
+//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#ifdef __APPLE__
+/* Defined before OpenGL and GLUT includes to avoid deprecation messages */
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>      // handle the window-managing operations
+#else
+#include <GL/glew.h>
+#include <GL/freeglut.h>    // handle the window-managing operations
+#endif
+#include <stdlib.h>
+#include <iostream>
+#include <string>
+
+//#include <conio.h>
+
+using namespace std;
+
+GLint win_width = 500,
+win_hight = 500;
+float transValue;
+float scaleValue;
+GLdouble PI = 3.14159265359;
+
+int score = 0;
+
+bool displayCarInfo = false; // Flag to indicate whether to draw the triangle
+bool displayFlyMInfo = false; // Flag to indicate whether to draw the triangle
+bool RobotTalking = true;
+bool displayQuestions = false;
+bool right1 = false;
+bool false1 = false;
+bool right2 = false;
+bool false2 = false;
+bool right3 = false;
+bool false3 = false;
+bool displayRobotRightAnswer = false;
+bool displayRobotFalseAnswer = false;
+bool displayAddInfo = false;
+bool displayMenu = true;
+bool displayWaiter = false;
+bool displayTeacher = false;
+bool displayDoctor = false;
+bool displayFcarInfo = false;
+
+//float ovalRadiusX = 0.5;
+//float ovalRadiusY = 0.3;
+float transValue1; //watch
+float transValue2; //watch
+float transValue3 = 0.0f; //uniform
+float transValue4 = 0.0f; //unifrom
+float transValue5 = 0.0f; // cloud shirt
+float transValue6 = 0.0f; //cloud shirt
+float transValue7 = 0.0f; // فيونكه
+float transValue8 = 0.0f; // فيونكه
+float transValue9 = 0.0f; // mask
+float transValue10 = 0.0f; //mask
+float transValue11 = 0.0f; // hat
+float transValue12 = 0.0f; //hat
+float transValue13 = 0.0f; // dress
+float transValue14 = 0.0f; //dress
+float transValue15 = 0.0f; // bag
+float transValue16 = 0.0f; //bag
+float transValue17 = 0.0f; // stick
+float transValue18 = 0.0f; //stick
+float transValue19 = 0.0f; // note
+float transValue20 = 0.0f; //note
+float transValue21 = 0.0f; // tshirt
+float transValue22 = 0.0f; //tshirt
+float transValue23 = 0.0f; // glasses
+float transValue24 = 0.0f; //glasses
+float transValue25 = 0.0f; // sunglasses
+float transValue26 = 0.0f; //sunglasses
+float transValue27 = 0.0f; // party
+float transValue28 = 0.0f; //party
+
+//float scaleValue;
+float scaleValue1;
+float scaleValue2;
+float scaleValue3;
+float scaleValue4;
+float scaleValue5;
+float scaleValue6;
+float scaleValue7;
+float scaleValue8;
+float scaleValue9;
+float scaleValue10;
+float scaleValue11;
+float scaleValue12;
+
+
+float zoomFactor = 1.0f;
+bool transitionInProgress = false;
+
+//H
+float ovalX = 0.0;
+float ovalY = 0.0;
+float ovalRadiusX = 0.5;
+float ovalRadiusY = 0.3;
+
+// buffers
+GLuint myTexture1;
+GLuint myTexture2;
+GLuint myTexture3;
+GLuint myTexture4;
+GLuint myTexture5;
+
+char image1Path[] = "C:\\Users\\miccr\\Downloads\\TCom_Pavement_Terrazzo2_512_roughness.bmp"; //floor easy
+char image2Path[] = "C:\\Users\\miccr\\Downloads\\Plaster001_1K-PNG_Color.bmp"; //wall easy
+
+char image3Path[] = "C:\\Users\\miccr\\Downloads\\Tiles009_1K-PNG_Color.bmp"; //wall hard
+
+char image4Path[] = "C:\\Users\\miccr\\Downloads\\Chip001_1K-PNG_Color.bmp"; //quiz board
+//char image5Path[] = "C:\\Users\\miccr\\Downloads\\11.bmp"; //ads
+
+//MODES
+bool easy = false;
+bool hard = false;
+bool clothes = false;
+
+void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius) {
+	int i;
+	int triangleAmount = 20; //# of triangles used to draw circle
+
+	//GLfloat radius = 0.8f; //radius
+	GLfloat twicePi = 2.0f * PI;
+	//GLfloat twicePi = PI; 
+
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(x, y); // center of circle
+	for (i = 0; i <= triangleAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(i * twicePi / triangleAmount)),
+			y + (radius * sin(i * twicePi / triangleAmount))
+		);
+	}
+	glEnd();
+}
+
+//s
+void drawFilledCircleS(GLfloat x, GLfloat y, GLfloat radius) {
+	int i;
+	int triangleAmount = 20; //# of triangles used to draw circle
+
+	//GLfloat radius = 0.8f; //radius
+	//GLfloat twicePi = 2.0f * PI;//s
+    GLfloat twicePi = PI; //s
+
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(x, y); // center of circle
+	for (i = 0; i <= triangleAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(i * twicePi / triangleAmount)),
+			y + (radius * sin(i * twicePi / triangleAmount))
+		);
+	}
+	glEnd();
+}
+
+void drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius) {
+	int i;
+	int lineAmount = 100; //# of triangles used to draw circle
+
+	//GLfloat radius = 0.8f; //radius
+	GLfloat twicePi = 2.0f * PI; 
+	//GLfloat twicePi = PI; 
+	glBegin(GL_LINE_LOOP);
+	for (i = 0; i <= lineAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(i * twicePi / lineAmount)),
+			y + (radius * sin(i * twicePi / lineAmount))
+		);
+	}
+	glEnd();
+}
+//s
+void drawHollowCircleS(GLfloat x, GLfloat y, GLfloat radius) {
+	int i;
+	int lineAmount = 100; //# of triangles used to draw circle
+
+	//GLfloat radius = 0.8f; //radius
+	//GLfloat twicePi = 2.0f * PI; //s
+	GLfloat twicePi = PI; //s
+	glBegin(GL_LINE_LOOP);
+	for (i = 0; i <= lineAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(i * twicePi / lineAmount)),
+			y + (radius * sin(i * twicePi / lineAmount))
+		);
+	}
+	glEnd();
+}
+
+//s
+void drawFilledEllipse(GLfloat centerX, GLfloat centerY, GLfloat majorRadius, GLfloat minorRadius) {
+	int i;
+	int triangleAmount = 20; //# of triangles used to draw ellipse
+
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(centerX, centerY); // center of ellipse
+	for (i = 0; i <= triangleAmount; i++) {
+		GLfloat angle = i * (2.0f * PI / triangleAmount);
+		GLfloat x = centerX + majorRadius * cos(angle);
+		GLfloat y = centerY + minorRadius * sin(angle);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
+
+//s
+void drawCircle(GLfloat x, GLfloat y, GLfloat radius) {
+	int i;
+	int triangleAmount = 100; //# of triangles used to draw circle
+	//GLfloat radius = 0.8f; //radius
+	GLfloat twicePi = 2 * PI;
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(x, y); // center of circle
+	for (i = 0; i <= triangleAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(-i * twicePi / triangleAmount)),
+			y + (radius * sin(-i * twicePi / triangleAmount))
+		);
+	}
+	glEnd();
+}
+
+void drawOval() {
+	int numSegments = 100;
+
+	glBegin(GL_TRIANGLE_FAN);
+	for (int i = 0; i < numSegments; i++) {
+		double theta = 2.0 * 3.1415926 * double(i) / double(numSegments);
+		double x = ovalX + ovalRadiusX * cos(theta);
+		double y = ovalY + ovalRadiusY * sin(theta);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
+
+//http://stackoverflow.com/questions/12518111/how-to-load-a-bmp-on-glut-to-use-it-as-a-texture
+GLuint LoadTexture(const char* filename, int width, int height)
+{
+	GLuint texture;
+	unsigned char* data;
+	FILE* file;
+
+	//The following code will read in our RAW file
+	fopen_s(&file, filename, "rb");
+
+	if (file == NULL)
+	{
+		cout << "Unable to open the image file" << endl << "Program will exit :(" << endl;
+		exit(0);
+		return 0;
+	}
+
+	data = (unsigned char*)malloc(width * height * 3);
+	fread(data, width * height * 3, 1, file);
+
+	fclose(file);
+
+
+	// reorder the image colors to RGB not BGR
+	for (int i = 0; i < width * height; ++i)
+	{
+		int index = i * 3;
+		unsigned char B, R;
+		B = data[index];
+		R = data[index + 2];
+
+		data[index] = R;
+		data[index + 2] = B;
+
+	}
+
+	/////////////////////////////////////////
+   // All Exercises TODO: load another texture image
+   //////
+	glGenTextures(1, &texture);            //generate the texture with the loaded data
+	glBindTexture(GL_TEXTURE_2D, texture); //bind the texture to it's array
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); //set texture environment parameters //m ( GL_MODULATE or  GL_REPLACE )
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); //m ( GL_CLAMP or GL_REPEAT)
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); //m (GL_CLAMP or GL_REPEAT)
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	/////////////////////////////////////////
+
+	free(data); //free the texture array
+
+	if (glGetError() != GL_NO_ERROR)
+		printf("GLError in genTexture()\n");
+
+	return texture; //return whether it was successfull  
+}
+
+void work()
+{
+	////المبنى////
+   // مباني بيج خلفية
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-1.0f, 0.2f);
+	glVertex2f(1.0f, 0.2f);
+	glVertex2f(1.0f, -0.4f);
+	glVertex2f(-1.0f, -0.4f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.59f, 0.2f);
+	glVertex2f(-0.5f, 0.2f);
+	glVertex2f(-0.5f, 0.43f);
+	glVertex2f(-0.59f, 0.43f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.5f, 0.2f);
+	glVertex2f(-0.47f, 0.2f);
+	glVertex2f(-0.47f, 0.3f);
+	glVertex2f(-0.5f, 0.3f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.47f, 0.2f);
+	glVertex2f(-0.39f, 0.2f);
+	glVertex2f(-0.39f, 0.38f);
+	glVertex2f(-0.47f, 0.38f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.39f, 0.2f);
+	glVertex2f(-0.31f, 0.2f);
+	glVertex2f(-0.31f, 0.5f);
+	glVertex2f(-0.39f, 0.5f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.31f, 0.2f);
+	glVertex2f(-0.28f, 0.2f);
+	glVertex2f(-0.28f, 0.46f);
+	glVertex2f(-0.31f, 0.46f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.28f, 0.2f);
+	glVertex2f(-0.23f, 0.2f);
+	glVertex2f(-0.23f, 0.27f);
+	glVertex2f(-0.28f, 0.27f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.23f, 0.2f);
+	glVertex2f(-0.19f, 0.2f);
+	glVertex2f(-0.19f, 0.37f);
+	glVertex2f(-0.23f, 0.37f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-0.19f, 0.2f);
+	glVertex2f(-0.13f, 0.2f);
+	glVertex2f(-0.13f, 0.3f);
+	glVertex2f(-0.19f, 0.3f);
+	glEnd();
+	////يمين
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.59f, 0.2f);
+	glVertex2f(0.5f, 0.2f);
+	glVertex2f(0.5f, 0.43f);
+	glVertex2f(0.59f, 0.43f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.5f, 0.2f);
+	glVertex2f(0.47f, 0.2f);
+	glVertex2f(0.47f, 0.3f);
+	glVertex2f(0.5f, 0.3f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.47f, 0.2f);
+	glVertex2f(0.39f, 0.2f);
+	glVertex2f(0.39f, 0.38f);
+	glVertex2f(0.47f, 0.38f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.39f, 0.2f);
+	glVertex2f(0.31f, 0.2f);
+	glVertex2f(0.31f, 0.5f);
+	glVertex2f(0.39f, 0.5f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.31f, 0.2f);
+	glVertex2f(0.28f, 0.2f);
+	glVertex2f(0.28f, 0.46f);
+	glVertex2f(0.31f, 0.46f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.28f, 0.2f);
+	glVertex2f(0.23f, 0.2f);
+	glVertex2f(0.23f, 0.27f);
+	glVertex2f(0.28f, 0.27f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.23f, 0.2f);
+	glVertex2f(0.19f, 0.2f);
+	glVertex2f(0.19f, 0.37f);
+	glVertex2f(0.23f, 0.37f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.19f, 0.2f);
+	glVertex2f(0.13f, 0.2f);
+	glVertex2f(0.13f, 0.3f);
+	glVertex2f(0.19f, 0.3f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(1.0f, 0.2f);
+	glVertex2f(0.964f, 0.2f);
+	glVertex2f(0.964f, 0.3f);
+	glVertex2f(1.0f, 0.3f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(-1.0f, 0.2f);
+	glVertex2f(-0.964f, 0.2f);
+	glVertex2f(-0.964f, 0.39f);
+	glVertex2f(-1.0f, 0.39f);
+	glEnd();
+
+	// الارض
+	glBegin(GL_QUADS);
+	glColor4f(0.3f, 0.5f, 0.6f, 1.0f);
+	glVertex2f(-1.0f, -0.4f);
+	glVertex2f(-1.0f, -1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glVertex2f(1.0f, -0.4f);
+	glEnd();
+	// خط بيج
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.0f, 1.0f, 0.9f);
+	glVertex2f(-1.0f, -0.4f);
+	glVertex2f(0.3f, -0.4f);
+	glEnd();
+	//  اخضر خط
+	glLineWidth(2.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.6f, 0.8f, 0.1f);
+	glVertex2f(-1.0f, -0.39f);
+	glVertex2f(0.3f, -0.39f);
+	glEnd();
+
+	// يسار رصيف
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 0.9f, 1.0f);
+	glVertex2f(-1.0f, -0.6f);
+	glVertex2f(-0.5f, -0.6f);
+	glVertex2f(-0.35f, -0.7f);
+	glVertex2f(-1.0f, -0.7f);
+	glEnd();
+	//اخضر
+	glBegin(GL_QUADS);
+	glColor3f(0.6f, 0.8f, 0.1f);
+	glVertex2f(-1.0f, -0.62f);
+	glVertex2f(-0.501f, -0.62f);
+	glVertex2f(-0.43f, -0.66f);
+	glVertex2f(-1.0f, -0.66f);
+	glEnd();
+	// يمين رصيف
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 0.9f, 1.0f);
+	glVertex2f(1.0f, -0.48f);
+	glVertex2f(0.3f, -0.48f);
+	glVertex2f(0.15f, -0.65f);
+	glVertex2f(1.0f, -0.65f);
+	glEnd();
+	//اخضر
+	glBegin(GL_QUADS);
+	glColor3f(0.6f, 0.8f, 0.1f);
+	glVertex2f(1.0f, -0.50f);
+	glVertex2f(0.35f, -0.50f);
+	glVertex2f(0.26f, -0.62f);
+	glVertex2f(1.0f, -0.62f);
+	glEnd();
+
+	//مبنى ابيض يسار
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.91f, 0.0f);
+	glVertex2f(-0.59f, 0.0f);
+	glVertex2f(-0.59f, 0.6f);
+	glVertex2f(-0.91f, 0.6f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.87f, 0.6f);
+	glVertex2f(-0.63f, 0.6f);
+	glVertex2f(-0.63f, 0.67f);
+	glVertex2f(-0.87f, 0.67f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.91f, 0.67f);
+	glVertex2f(-0.59f, 0.67f);
+	glVertex2f(-0.59f, 0.69f);
+	glVertex2f(-0.91f, 0.69f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.84f, 0.67f);
+	glVertex2f(-0.66f, 0.67f);
+	glVertex2f(-0.66f, 0.74f);
+	glVertex2f(-0.84f, 0.74f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.755f, 0.74f);
+	glVertex2f(-0.755f, 0.81f);
+	glEnd();
+	//شبابيك
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.9f, 0.55f);
+	glVertex2f(-0.6f, 0.55f);
+	glVertex2f(-0.6f, 0.48f);
+	glVertex2f(-0.9f, 0.48f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.9f, 0.45f);
+	glVertex2f(-0.6f, 0.45f);
+	glVertex2f(-0.6f, 0.38f);
+	glVertex2f(-0.9f, 0.38f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.9f, 0.35f);
+	glVertex2f(-0.6f, 0.35f);
+	glVertex2f(-0.6f, 0.28f);
+	glVertex2f(-0.9f, 0.28f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.9f, 0.25f);
+	glVertex2f(-0.6f, 0.25f);
+	glVertex2f(-0.6f, 0.18f);
+	glVertex2f(-0.9f, 0.18f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.9f, 0.15f);
+	glVertex2f(-0.6f, 0.15f);
+	glVertex2f(-0.6f, 0.08f);
+	glVertex2f(-0.9f, 0.08f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.7f, 0.55f);
+	glVertex2f(-0.7f, 0.08f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.8f, 0.55f);
+	glVertex2f(-0.8f, 0.08f);
+	glEnd();
+	// مبنى يسار 
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.4f, 0.4f, 1.0f);
+	glVertex2f(-1.0f, -0.38f);
+	glVertex2f(-0.3f, -0.38f);
+	glVertex2f(-0.3f, 0.0f);
+	glVertex2f(-1.0f, 0.0f);
+	glEnd();
+	//l
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(-0.9f, 0.0f);
+	glVertex2f(-0.69f, 0.0f);
+	glVertex2f(-0.69f, 0.03f);
+	glVertex2f(-0.9f, 0.03f);
+	glEnd();
+	//r
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(-0.6f, 0.0f);
+	glVertex2f(-0.4f, 0.0f);
+	glVertex2f(-0.4f, 0.03f);
+	glVertex2f(-0.6f, 0.03f);
+	glEnd();
+	//شبابيك
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.98f, -0.08f);
+	glVertex2f(-0.33f, -0.08f);
+	glVertex2f(-0.33f, -0.15f);
+	glVertex2f(-0.98f, -0.15f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.98f, -0.18f);
+	glVertex2f(-0.33f, -0.18f);
+	glVertex2f(-0.33f, -0.25f);
+	glVertex2f(-0.98f, -0.25f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(0.6f, 0.4f, 0.4f, 1.0f);
+	glVertex2f(-0.65f, -0.08f);
+	glVertex2f(-0.65f, -0.25f);
+	glEnd();
+	//باب
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.72f, -0.28f);
+	glVertex2f(-0.58f, -0.28f);
+	glVertex2f(-0.58f, -0.38f);
+	glVertex2f(-0.72f, -0.38f);
+	glEnd();
+	//مبنى ابيض وسط
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.09f, -0.38f);
+	glVertex2f(0.2f, -0.38f);
+	glVertex2f(0.2f, 0.4f);
+	glVertex2f(-0.09f, 0.4f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(0.15f, 0.4f);
+	glVertex2f(0.15f, 0.47f);
+	glVertex2f(-0.05f, 0.47f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.09f, 0.47f);
+	glVertex2f(0.2f, 0.47f);
+	glVertex2f(0.2f, 0.49f);
+	glVertex2f(-0.09f, 0.49f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.04f, 0.49f);
+	glVertex2f(0.15f, 0.49f);
+	glVertex2f(0.15f, 0.54f);
+	glVertex2f(-0.04f, 0.54f);
+	glEnd();
+	//شبابيك 
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, 0.38f);
+	glVertex2f(0.18f, 0.38f);
+	glVertex2f(0.18f, 0.35f);
+	glVertex2f(-0.07f, 0.35f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, 0.28f);
+	glVertex2f(0.18f, 0.28f);
+	glVertex2f(0.18f, 0.25f);
+	glVertex2f(-0.07f, 0.25f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, 0.18f);
+	glVertex2f(0.18f, 0.18f);
+	glVertex2f(0.18f, 0.15f);
+	glVertex2f(-0.07f, 0.15f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, 0.08f);
+	glVertex2f(0.18f, 0.08f);
+	glVertex2f(0.18f, 0.05f);
+	glVertex2f(-0.07f, 0.05f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, -0.08f);
+	glVertex2f(0.18f, -0.08f);
+	glVertex2f(0.18f, -0.05f);
+	glVertex2f(-0.07f, -0.05f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(-0.07f, -0.18f);
+	glVertex2f(0.18f, -0.18f);
+	glVertex2f(0.18f, -0.15f);
+	glVertex2f(-0.07f, -0.15f);
+	glEnd();
+	//باب
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.03f, -0.28f);
+	glVertex2f(0.07f, -0.28f);
+	glVertex2f(0.07f, -0.38f);
+	glVertex2f(0.03f, -0.38f);
+	glEnd();
+	//مبنى ابيض يمين
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.91f, 0.0f);
+	glVertex2f(0.59f, 0.0f);
+	glVertex2f(0.59f, 0.6f);
+	glVertex2f(0.91f, 0.6f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.87f, 0.6f);
+	glVertex2f(0.63f, 0.6f);
+	glVertex2f(0.63f, 0.67f);
+	glVertex2f(0.87f, 0.67f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.91f, 0.67f);
+	glVertex2f(0.59f, 0.67f);
+	glVertex2f(0.59f, 0.69f);
+	glVertex2f(0.91f, 0.69f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.84f, 0.67f);
+	glVertex2f(0.66f, 0.67f);
+	glVertex2f(0.66f, 0.74f);
+	glVertex2f(0.84f, 0.74f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.755f, 0.74f);
+	glVertex2f(0.755f, 0.81f);
+	glEnd();
+	//شبابيك
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.9f, 0.55f);
+	glVertex2f(0.6f, 0.55f);
+	glVertex2f(0.6f, 0.48f);
+	glVertex2f(0.9f, 0.48f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.9f, 0.45f);
+	glVertex2f(0.6f, 0.45f);
+	glVertex2f(0.6f, 0.38f);
+	glVertex2f(0.9f, 0.38f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.9f, 0.35f);
+	glVertex2f(0.6f, 0.35f);
+	glVertex2f(0.6f, 0.28f);
+	glVertex2f(0.9f, 0.28f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.9f, 0.25f);
+	glVertex2f(0.6f, 0.25f);
+	glVertex2f(0.6f, 0.18f);
+	glVertex2f(0.9f, 0.18f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.9f, 0.15f);
+	glVertex2f(0.6f, 0.15f);
+	glVertex2f(0.6f, 0.08f);
+	glVertex2f(0.9f, 0.08f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.7f, 0.55f);
+	glVertex2f(0.7f, 0.08f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.8f, 0.55f);
+	glVertex2f(0.8f, 0.08f);
+	glEnd();
+
+	// مبنى يمين 
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.4f, 0.4f, 1.0f);
+	glVertex2f(1.0f, -0.58f);
+	glVertex2f(0.3f, -0.58f);
+	glVertex2f(0.3f, 0.0f);
+	glVertex2f(1.0f, 0.0f);
+	glEnd();
+	//l
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(0.9f, 0.0f);
+	glVertex2f(0.69f, 0.0f);
+	glVertex2f(0.69f, 0.03f);
+	glVertex2f(0.9f, 0.03f);
+	glEnd();
+	//r
+	glBegin(GL_QUADS);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(0.6f, 0.0f);
+	glVertex2f(0.4f, 0.0f);
+	glVertex2f(0.4f, 0.03f);
+	glVertex2f(0.6f, 0.03f);
+	glEnd();
+	//شبابيك
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.98f, -0.08f);
+	glVertex2f(0.33f, -0.08f);
+	glVertex2f(0.33f, -0.15f);
+	glVertex2f(0.98f, -0.15f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.98f, -0.18f);
+	glVertex2f(0.33f, -0.18f);
+	glVertex2f(0.33f, -0.25f);
+	glVertex2f(0.98f, -0.25f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.98f, -0.28f);
+	glVertex2f(0.33f, -0.28f);
+	glVertex2f(0.33f, -0.35f);
+	glVertex2f(0.98f, -0.35f);
+	glEnd();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.98f, -0.38f);
+	glVertex2f(0.33f, -0.38f);
+	glVertex2f(0.33f, -0.45f);
+	glVertex2f(0.98f, -0.45f);
+	glEnd();
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(0.6f, 0.4f, 0.4f, 1.0f);
+	glVertex2f(0.65f, -0.08f);
+	glVertex2f(0.65f, -0.45f);
+	glEnd();
+	//باب
+	glBegin(GL_QUADS);
+	glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+	glVertex2f(0.72f, -0.48f);
+	glVertex2f(0.58f, -0.48f);
+	glVertex2f(0.58f, -0.58f);
+	glVertex2f(0.72f, -0.58f);
+	glEnd();
+	// ساق الشجر
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(-0.6f, -0.55f);
+	glVertex2f(-0.6f, -0.64f);
+	glEnd();
+	//
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glVertex2f(-0.8f, -0.55f);
+	glVertex2f(-0.8f, -0.64f);
+	glEnd();
+	// الشجر 
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.3f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.8f, -0.45f, 0); // Apply translation
+	glScalef(0.16, 0.4, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	//
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.3f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.6f, -0.45f, 0); // Apply translation
+	glScalef(0.16, 0.4, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	//الظل 
+	glPushMatrix();
+	glColor4f(0.4f, 0.4f, 0.4f, 0.24f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.8f, -0.64f, 0); // Apply translation
+	glScalef(0.15, 0.03, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	//
+	glPushMatrix();
+	glColor4f(0.4f, 0.4f, 0.4f, 0.24f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.6f, -0.64f, 0); // Apply translation
+	glScalef(0.15, 0.03, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+}
+
+void drawRoom() {
+
+	//glBegin(GL_QUADS);
+	//glColor3f(0.7f, 0.9f, 0.9f);
+	//glVertex2f(0.64f, 0.55f);
+	//glVertex2f(0.64f, -0.3f);
+	//glVertex2f(-0.64f, -0.3f);
+	//glVertex2f(-0.64f, 0.55f);
+	//glEnd();
+
+	//glBegin(GL_QUADS);
+	//glColor3f(0.7f, 0.9f, 0.9f);
+	//glVertex2f(-1.0f, 0.7f);
+	//glVertex2f(1.f, 0.7f);
+	//glVertex2f(0.64f, 0.55f);
+	//glVertex2f(-0.64f, 0.55f);
+	//glEnd();
+
+	//glBegin(GL_QUADS);
+	//glColor3f(0.7f, 0.9f, 0.9f);
+	//glVertex2f(0.64f, 0.55f);
+	//glVertex2f(1.0f, 0.7f);
+	//glVertex2f(1.0f, -0.66f);
+	//glVertex2f(0.64f, -0.3f);
+	//glEnd();
+
+	//glBegin(GL_QUADS);
+	//glColor3f(0.7f, 0.9f, 0.9f);
+	//glVertex2f(-1.0f, 0.7f);
+	//glVertex2f(-0.64f, 0.55f);
+	//glVertex2f(-0.64f, -0.3f);
+	//glVertex2f(-1.0f, -0.66f);
+	//glEnd();
+	////floor
+	//glBegin(GL_QUADS);
+	//glColor3f(0.90f, 0.90f, 0.90f);
+	//glVertex2f(-0.64f, -0.3f);
+	//glVertex2f(0.64f, -0.3f);
+	//glVertex2f(1.0f, -0.66f);
+	//glVertex2f(-1.0f, -0.66f);
+	//glEnd();
+
+	//lines
+	/*glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-1.0f, 0.7f);
+	glVertex2f(-0.64f, 0.55f);
+	glVertex2f(0.64f, 0.55f);
+	glVertex2f(1.0f, 0.7f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.64f, -0.3f);
+	glVertex2f(0.64f, -0.3f);
+	glVertex2f(1.0f, -0.66f);
+	glVertex2f(-1.0f, -0.66f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-1.0f, 0.7f);
+	glVertex2f(-1.0f, -0.66f);
+	glVertex2f(-0.64f, 0.55f);
+	glVertex2f(-0.64f, -0.3f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.64f, 0.55f);
+	glVertex2f(0.64f, -0.3f);
+	glVertex2f(1.0f, 0.7f);
+	glVertex2f(1.0f, -0.66f);
+	glEnd();*/
+}
+
+void roomLines() {
+	//lines
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-1.0f, 0.7f);
+	glVertex2f(-0.64f, 0.55f);
+	glVertex2f(0.64f, 0.55f);
+	glVertex2f(1.0f, 0.7f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.64f, -0.3f);
+	glVertex2f(0.64f, -0.3f);
+	glVertex2f(1.0f, -0.66f);
+	glVertex2f(-1.0f, -0.66f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-1.0f, 0.7f);
+	glVertex2f(-1.0f, -0.66f);
+	glVertex2f(-0.64f, 0.55f);
+	glVertex2f(-0.64f, -0.3f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.64f, 0.55f);
+	glVertex2f(0.64f, -0.3f);
+	glVertex2f(1.0f, 0.7f);
+	glVertex2f(1.0f, -0.66f);
+	glEnd();
+
+}
+
+void instructionsBoard() {
+
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.66f, 0.3f);
+	glVertex2f(0.98f, 0.22f);
+	glVertex2f(0.98f, -0.17f);
+	glVertex2f(0.66f, -0.02f);
+	glEnd();
+}
+
+void adsBoard()
+{
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.95f, 0.6f);
+	glVertex2f(-0.68f, 0.49f);
+	glVertex2f(-0.68f, -0.26f);
+	glVertex2f(-0.95f, -0.5f);
+	glEnd();
+
+	glEnable(GL_TEXTURE_2D);                         //////////////////////////////////////////////////////////////////
+	glBindTexture(GL_TEXTURE_2D, myTexture5);
+
+	glBegin(GL_QUADS);
+	glVertex2f(-0.68f, 0.49f); glTexCoord2f(0, 1);
+	glVertex2f(-0.95f, 0.6f); glTexCoord2f(0, 0);
+	glVertex2f(-0.95f, -0.5f); glTexCoord2f(1, 0);
+	glVertex2f(-0.68f, -0.26f); glTexCoord2f(1, 1);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void adsBoardInfo() {
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBegin(GL_POLYGON);
+		//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+		//glVertex2f(-0.5f, -0.5f); // right to the b l
+		//glVertex2f(-0.5f, 0.5f); // b l
+		//glVertex2f(0.5f, 0.5f); // t l 
+		//glVertex2f(0.5f, -0.5f); // t r 
+		//glEnd();
+
+
+		glEnable(GL_TEXTURE_2D);                      ///////////////////////////////////////////////////////////////////
+		glBindTexture(GL_TEXTURE_2D, myTexture5);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0); glVertex2f(-0.5f, -0.5f);
+		glTexCoord2f(1, 0); glVertex2f(0.5f, -0.5f);
+		glTexCoord2f(1, 1); glVertex2f(0.5f, 0.5f);
+		glTexCoord2f(0, 1); glVertex2f(-0.5f, 0.5f);
+	
+		
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		glLineWidth(1);
+		glBegin(GL_LINE_LOOP);
+		glColor3f(0.0f, 0.0f, 0.0f);
+		glVertex2f(-0.5f, -0.5f); // right to the b l
+		glVertex2f(-0.5f, 0.5f); // b l
+		glVertex2f(0.5f, 0.5f); // t l 
+		glVertex2f(0.5f, -0.5f); // t r 
+		glEnd();
+
+		//glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+		//glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+		//const char* text = "Car Info"; // Text to display
+		//for (const char* c = text; *c != '\0'; ++c) {
+		//	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		//}
+
+	}
+
+
+void car()
+{
+	glLineWidth(2);
+	glBegin(GL_POLYGON);
+	glColor3f(0.8f, 0.8f, 0.8f);
+	glVertex2f(-0.5f, -0.3f);  
+	glVertex2f(0.5f, -0.3f);   
+	glVertex2f(0.6f, -0.2f);
+	glVertex2f(0.62f, -0.1f);
+	glVertex2f(0.4f, -0.08f);
+	glVertex2f(0.37f, -0.12f);//top right
+	glVertex2f(-0.4f, -0.12f); //top left
+	glVertex2f(-0.42f, -0.13f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);  // Black color
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.5f, -0.3f);
+	glVertex2f(0.5f, -0.3f);
+	glVertex2f(0.6f, -0.2f);
+	glVertex2f(0.62f, -0.1f);
+	glVertex2f(0.4f, -0.08f);
+	glVertex2f(0.37f, -0.12f);//top right
+	glVertex2f(-0.4f, -0.12f); //top left
+	glVertex2f(-0.42f, -0.13f);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glColor3f(0.6f, 0.9f, 1.0f);
+	glVertex2f(-0.4f, -0.12f); //b left
+	glVertex2f(0.29f, -0.12f);//b right
+	glVertex2f(0.20f, 0.01f); // t r
+	glVertex2f(-0.25f, 0.01f); // t l
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);  // Black color
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.4f, -0.12f); //b left
+	glVertex2f(0.29f, -0.12f);//b right
+	glVertex2f(0.20f, 0.01f); // t r
+	glVertex2f(-0.25f, 0.01f); // t l
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glColor3f(0.4f, 0.1f, 0.6f);
+	glVertex2f(-0.25f, 0.01f); // b l
+	glVertex2f(0.20f, 0.01f); //b r
+	glVertex2f(0.15f, 0.06f); // t r
+	glVertex2f(-0.19f, 0.06f); // t l
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);  // Black color
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.25f, 0.01f); // b l
+	glVertex2f(0.20f, 0.01f); //b r
+	glVertex2f(0.15f, 0.06f); // t r
+	glVertex2f(-0.19f, 0.06f); // t l
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.1f, 0.1f, 1.0f);
+	glVertex2f(0.15f, 0.06f); // right to the b l
+	glVertex2f(-0.19f, 0.06f); // b l
+	glVertex2f(-0.15f, 0.09f); // t l 
+	glVertex2f(0.37f, 0.1f); // t r 
+	glVertex2f(0.55f, -0.1f); // b r 
+	glVertex2f(0.4f, -0.08f);
+	glVertex2f(0.29f, -0.12f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);  // Black color
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(0.15f, 0.06f); // right to the b l
+	glVertex2f(-0.19f, 0.06f); // b l
+	glVertex2f(-0.15f, 0.09f); // t l 
+	glVertex2f(0.37f, 0.1f); // t r 
+	glVertex2f(0.55f, -0.1f); // b r 
+	glVertex2f(0.4f, -0.08f);
+	glVertex2f(0.29f, -0.12f);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 0.0f);  // Black color
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.44f, -0.2f);
+	glVertex2f(-0.34f, -0.2f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.46f, -0.25f);
+	glVertex2f(-0.36f, -0.25f);
+	glEnd();
+
+	glColor3f(0.4f, 0.1f, 0.6f);
+	glBegin(GL_LINE_STRIP);
+	glVertex2f(0.35f, -0.25f);
+	glVertex2f(0.14f, -0.25f);
+	glVertex2f(0.10f, -0.19f);
+	glVertex2f(-0.2f, -0.19f);
+	glEnd();
+
+	// Wheels
+	glColor3f(0.0f, 0.0f, 0.0f); // Black color for the wheels
+	drawFilledCircle(-0.2f, -0.25f, 0.090f); // Front wheel
+	drawFilledCircle(0.4f, -0.25f, 0.090f);  // Rear wheel
+
+	glColor3f(0.2f, 0.0f, 0.4f); // Black color for the wheels
+	drawFilledCircle(-0.2f, -0.25f, 0.050f); // Front wheel
+	drawFilledCircle(0.4f, -0.25f, 0.050f);  // Rear wheel
+	
+
+}
+
+void carInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+
+	const char* text = "Electric cars are like regular cars, but instead of using\n"
+		"gasoline,they run on electricity. Just like your phone needs\n"
+		"to be charged,electric cars need to be charged too! They\n"
+		"have a special battery that stores the electricity, and you\n"
+		"can plug them into a charging station or a regular power\n"
+		" outlet at home to charge them up. When you drive an\n" // Text to display
+		"electric car, you don't have to worry about polluting the air\n"
+		"because they don't emit any tailpipe emissions like\n"
+		"traditional cars Plus, they're really quiet and can go so fast!\n";
+		
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+//s
+void FlyM()
+{   //big
+	glColor3f(0.7f, 0.9f, 1.0f);
+	drawFilledCircleS(-0.1, 0.3, 0.4);
+	glLineWidth(2);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircleS(-0.1, 0.3, 0.4);
+	//small
+	glColor3f(0.1f, 0.2f, 0.3f);
+	drawFilledCircleS(-0.1, 0.3, -0.2);
+	//middle
+	glColor3f(0.4f, 0.4f, 0.4f);
+	drawFilledEllipse(-0.1f, 0.3f, -0.5f, -0.1f);
+	//yello circles
+	glColor3f(1.0f, 1.0f, 0.0f);
+	drawCircle(-0.1, 0.3, 0.03);
+	drawCircle(-0.3, 0.3, 0.03);
+	drawCircle(-0.5, 0.3, 0.03);
+	drawCircle(0.1, 0.3, 0.03);
+	drawCircle(0.3, 0.3, 0.03);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	drawCircle(0.0f, 0.9f, 0.04);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawCircle(-0.3f, 0.1f, 0.02);
+	drawCircle(0.1f, 0.1f, 0.02);
+
+	glEnd();
+
+	//lines
+	glLineWidth(2);
+	glBegin(GL_LINES);
+	glColor3f(0, 0, 0);
+	glVertex2f(0.0f, 0.9f);
+	glVertex2f(-0.1f, 0.7f);
+
+	glVertex2f(-0.2f, 0.2f);
+	glVertex2f(-0.3f, 0.1f);
+	glVertex2f(0.0f, 0.2f);
+	glVertex2f(0.1f, 0.1f);
+
+	glEnd();
+}
+
+void lable()
+{
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.1f, 0.2f); // Set starting position for text
+	const char* text = "AI Dream.."; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		int s;
+		int length;
+		length = strlen(text);
+		glRasterPos2f(-0.2f, 0.2f); // Set starting position for text
+		for (int i = 0; i < length; i++)
+			glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void board()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.8f, 0.1f);
+	glVertex2f(-0.8f, 0.3f);
+	glVertex2f(0.8f, 0.3f); // tri
+	glVertex2f(0.8f, 0.1f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.8f, 0.1f);
+	glVertex2f(-0.8f, 0.3f);
+	glVertex2f(0.8f, 0.3f); // tri
+	glVertex2f(0.8f, 0.1f);
+	glEnd();
+
+}
+void boardputton()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.4f, 0.0f);
+	glVertex2f(-0.4f, -0.7f);
+	glVertex2f(0.4f, -0.7f); // tri
+	glVertex2f(0.4f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.4f, 0.0f);
+	glVertex2f(-0.4f, -0.7f);
+	glVertex2f(0.4f, -0.7f); // tri
+	glVertex2f(0.4f, 0.0f);
+	glEnd();
+}
+void putton()
+{
+	// يمين ف
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	drawFilledCircle(0.2f, -0.18f, 0.15);
+	//حدود يمين ف
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawHollowCircle(0.2f, -0.18f, 0.15);
+	// يسار ف
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	drawFilledCircle(-0.2f, -0.18f, 0.15);
+	//  حدود يسار ف
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawHollowCircle(-0.2f, -0.18f, 0.15);
+	//// يمين ت
+	//glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	//drawFilledCircle(0.2f, -0.52f, 0.15);
+	////حدود يمين ت
+	//glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	//drawHollowCircle(0.2f, -0.52f, 0.15);
+	// يسار ت
+	glColor4f(0.6f, 0.8f, 0.8f, 1.0f);
+	drawFilledCircle(-0.0f, -0.52f, 0.15);
+	//  حدود يسار ت
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawHollowCircle(-0.0f, -0.52f, 0.15);
+}
+void lableputton(GLfloat x, GLfloat y, const char* text)
+{
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(x, y); // Set starting position for text
+	//const char* text = "Game \n clothes"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+}
+
+void back()
+{
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.8f, 1.0f, 1.0f);
+	glVertex2f(-1.0f, 1.0f);
+	glColor4f(0.9f, 1.0f, 0.6f, 1.0f);
+	glVertex2f(-1.0f, -1.0f);
+	glColor4f(0.9f, 1.0f, 0.6f, 1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glColor4f(0.7f, 0.8f, 1.0f, 1.0f);
+	glVertex2f(1.0f, 1.0f);
+	glEnd();
+	//buildings
+	glEnable(GL_BLEND);
+	work();
+	//text
+	glPushMatrix();
+	board();
+	lable();
+	boardputton();
+	putton();
+	lableputton(-0.28f, -0.15f, " Game ");
+	lableputton(-0.28f, -0.21f, "search");
+	lableputton(-0.28f, -0.27f, "-easy-");
+	//
+	lableputton(0.12f, -0.15f, " Game ");
+	lableputton(0.12f, -0.21f, "search");
+	lableputton(0.12f, -0.27f, "-hard-");
+	//
+	lableputton(-0.07f, -0.49f, " Game ");
+	lableputton(-0.07f, -0.59f, "Clothes");
+	glPopMatrix();
+	//
+	/*lableputton(0.128f, -0.54f, " story ");
+	glPopMatrix();*/
+	////
+
+	//// DISPLAY THE FlyM
+	glPushMatrix();
+	glTranslatef(-0.5, 0.6, 0.0); //x,y,z
+	glScalef(0.7, 0.7, 1.0);
+	FlyM();  // Lab 2 - Exercise
+	glPopMatrix();
+	////
+	glPushMatrix();
+	glTranslatef(0.5, 0.8, 0.0); //x,y,z
+	glScalef(0.4, 0.4, 1.0);
+	FlyM();  // Lab 2 - Exercise
+	glPopMatrix();
+	////
+	glPushMatrix();
+	glTranslatef(0.0, 0.7, 0.0); //x,y,z
+	glScalef(0.28, 0.28, 1.0);
+	FlyM();  // Lab 2 - Exercise
+	glPopMatrix();
+}
+
+void FlyMInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Imagine a futuristic flying machine that looks like it belongs\n"
+		"in outer space! This special flying machine is not designed\n"
+		"by humans,but by artificial intelligence (AI).Using advanced\n"
+		"algorithms and machine learning, the AI analyzes data and\n"
+		"comes up with unique designs for the flying machine.It has\n"
+		"sleek and aerodynamic shapes,shiny metallic surfaces,and\n" // Text to display
+		"maybe even cool LED lights.The AI also programs the\n"
+		"flying machine  to navigate through the air on its own,\n"
+		"making it fly smoothly and safely.\n";
+
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+void workSpace()
+{
+	////الجسم////
+
+	 ////////حدود///////
+
+	glPushMatrix();
+	glScalef(1.03, 1.03, 1.03);
+	// يسار الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glPopMatrix();
+	///الجسم
+	// يسار الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+	//اكسسوار يسار 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.1);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.2f, 0.1f, 0.099);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.2f, 0.1f, 0.089);
+
+	////الراس////
+	//حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.65f, 0); // Apply translation
+	glScalef(0.4, 0.3, 1); // Apply scaling
+
+	//R
+	glTranslatef(1.5, -1.87, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+	////الفم////
+
+	//حول الفم
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	glScalef(0.32, 0.22, 1); // Apply scaling
+
+	//R
+	glTranslatef(1.87, -2.18, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// الفم
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	glScalef(0.3, 0.19, 1); // Apply scaling
+
+	//R
+	glTranslatef(2.0, -2.53, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	//اسنان
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+
+	////اليد ////
+
+	 //اليمين
+
+	 // حول اليد 
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.5f, 0.04f, 0); // Apply translation
+	glScalef(0.2, 0.8, 1); // Apply scaling
+
+	//R
+	glTranslatef(2.0, -0.40, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.5f, 0.04f, 0); // Apply translation
+	glScalef(0.18, 0.76, 1); // Apply scaling
+
+	//R
+	glTranslatef(2.23, -0.42, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	//اليسار
+
+	// حول اليد 
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	glScalef(-0.2, 0.8, 1); // Apply scaling
+
+	//R
+	glTranslatef(-4.0, -0.40, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	glScalef(-0.18, 0.76, 1); // Apply scaling
+
+	//R
+	glTranslatef(-4.45, -0.42, 0.0);
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	// الظل 
+	glPushMatrix();
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.0f, -0.6f, 0); // Apply translation
+	glScalef(-0.65, -0.19, 1); // Apply scaling
+
+	//R
+	glTranslatef(-0.9, 0.1, 0.0); 
+	glScalef(0.6, 0.6, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+}
+
+void RobotFace(){
+	////الراس////
+	//حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.65f, 0); // Apply translation
+	glScalef(0.4, 0.3, 1); // Apply scaling
+
+	//R
+	glTranslatef(1.75, -0.4, 0.0);
+	glScalef(0.5, 0.5, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+	////الفم////
+
+	//حول الفم
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	glScalef(0.32, 0.22, 1); // Apply scaling
+
+	//R
+	glTranslatef(2.18, -0.1, 0.0);
+	glScalef(0.5, 0.5, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// الفم
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	glScalef(0.3, 0.19, 1); // Apply scaling
+
+	//R
+	glTranslatef(2.32, -0.1, 0.0);
+	glScalef(0.5, 0.5, 1.0);
+
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	//اسنان
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+}
+
+void RobotTalk()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.25f); // Set starting position for text
+	const char* text = "Welcom to the AI-GENERATED VEHICLES Room ! \n"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.3f); // Set starting position for text
+	const char* text1 = "Look around and learn about these inventions, \n"; // Text to display
+	for (const char* c = text1; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.35f); // Set starting position for text
+	const char* text2 = "You can answer questions to test your knowledge and collect scores. \n"; // Text to display
+	for (const char* c = text2; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(1.0f, -0.0f, -0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.4f); // Set starting position for text
+	const char* text3 = "I will be at the top if you need me :3    "; // Text to display
+	for (const char* c = text3; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(1.0f, -0.0f, -0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.45f); // Set starting position for text
+	const char* text4 = "Click x to go back to menu "; // Text to display
+	for (const char* c = text4; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+
+void RobotTalk1()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.25f); // Set starting position for text
+	const char* text = "Welcom to the ROBOTIC ASSISTANTS Room ! \n"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.3f); // Set starting position for text
+	const char* text1 = "Look around and learn about these inventions, \n"; // Text to display
+	for (const char* c = text1; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.35f); // Set starting position for text
+	const char* text2 = "You can answer questions to test your knowledge and collect scores. \n"; // Text to display
+	for (const char* c = text2; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(1.0f, -0.0f, -0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.4f); // Set starting position for text
+	const char* text3 = "I will be at the top if you need me :3    "; // Text to display
+	for (const char* c = text3; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+	glColor3f(1.0f, -0.0f, -0.0f); // Set text color to black
+	glRasterPos2f(-0.78f, -0.45f); // Set starting position for text
+	const char* text4 = "Click x to go back to menu "; // Text to display
+	for (const char* c = text4; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+//"Welcom to the Transporations Room ! \n"
+//"Look around and learn about these inventions, You can answer some questions to test your knowledge and collect scores. \n" // Text to display
+//"I will be at the top if you need me :3    ";
+
+void question() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(4);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.5f, 0.48f); // right to the b l
+	glVertex2f(0.4f, 0.42f);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glVertex2f(0.4f, 0.48f); // right to the b l
+	glVertex2f(0.5f, 0.42f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+
+	const char* text = "1) What type of fuel do electric cars use?\n"
+		"       a) Gasoline                  b) Electricity \n\n"
+		"2) Who designs the AI-generated flying machine?\n"
+		"       c) AI                        d)  Humans \n\n"
+		"3) How does the AI-generated flying car achieve lift to fly?\n\n"
+		"       e) Wings                     f)Thrusters"; // Text to display
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+}
+
+void rightAnswer() {
+	glBegin(GL_POLYGON);
+	glColor4f(0.56f, 0.93f, 0.56f,0.7f);
+	glVertex2f(0.5f, 0.5f); // right to the b l
+	glVertex2f(0.5f, 0.58f);
+	glVertex2f(0.8f, 0.58f); // right to the b l
+	glVertex2f(0.8f, 0.5f);
+	glEnd();
+}
+
+void falseAnswer() {
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 0.7f, 0.7f, 0.7f);
+	glVertex2f(0.5f, 0.5f); 
+	glVertex2f(0.5f, 0.58f);
+	glVertex2f(0.8f, 0.58f); 
+	glVertex2f(0.8f, 0.5f);
+	glEnd();
+}
+
+void RobotRightAnswer()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.7f, -0.3f); // Set starting position for text
+	const char* text = "right !!!!"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void RobotFalseAnswer()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.8f, -0.5f);
+	glVertex2f(-0.8f, -0.2f);
+	glVertex2f(0.5f, -0.20f); // tri
+	glVertex2f(0.2f, -0.5f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.7f, -0.3f); // Set starting position for text
+	const char* text = "Sorry !!!!"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void teacher()
+{
+
+
+	////الجسم////
+
+	 ////////حدود///////
+
+	glPushMatrix();
+	glScalef(1.03, 1.03, 1.03);
+	// يسار الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glPopMatrix();
+	///الجسم
+	// يسار الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	// bord 
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.2f, -0.1f);
+	glVertex2f(0.2f, -0.1f);
+	glVertex2f(0.2f, 0.2f);
+	glVertex2f(-0.2f, 0.2f);
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	//drawFilledCircle(0.0f, -0.1f, 0.26);
+   //يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	////الراس////
+	//حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//line bord
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.2f, -0.1f);
+	glVertex2f(0.2f, -0.1f);
+	glVertex2f(0.2f, 0.2f);
+	glVertex2f(-0.2f, 0.2f);
+	glEnd();
+	//line B
+	/*glLineWidth(5.0);
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.6f, 0.10f);
+	glVertex2f(0.7f, 0.7f);
+	glVertex2f(-0.1f, 0.1f);
+	glEnd();*/
+
+	glLineWidth(3.0);      // خطوط السبورة 
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.15f, 0.0f);
+	glVertex2f(0.15f, 0.0f);
+	glEnd();
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.15f, 0.1f);
+	glVertex2f(0.15f, 0.1f);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.15f, 0.15f);
+	glVertex2f(0.1f, 0.15f);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-0.15f, 0.05f);
+	glVertex2f(0.0f, 0.05f);
+	glEnd();
+
+
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.65f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+	////الفم////
+
+	//حول الفم
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	//glScalef(0.32, 0.22, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//// الفم
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	//glScalef(0.3, 0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//اسنان
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+
+	////اليد ////
+
+	 //اليمين
+
+	 // حول اليد 
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.04f, 0); // Apply translation
+	//glRotatef(45.0, 0.0, 0.0, -1.0);
+	//glScalef(0.2, 0.8, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.04f, 0); // Apply translation       
+	//glRotatef(45.0, 0.0, 0.0, -1.0);
+	//glScalef(0.18, 0.76, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//اليسار
+
+	// حول اليد 
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	//glScalef(-0.2, 0.8, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	//glScalef(-0.18, 0.76, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	// الظل 
+	//glPushMatrix();
+	//glColor3f(0.3f, 0.3f, 0.3f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.0f, -0.6f, 0); // Apply translation
+	//glScalef(-0.65, -0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+}
+
+void waiter()
+{
+	////body////
+
+	// upper left side part of the body
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// upper right side part of the body
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// the filling in the middle
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 1.0f, 0.9f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+
+	// the filling in the middle
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+	//buttons
+	glColor3f(0.9f, 0.7f, 0.0f);
+	drawFilledCircle(0.09f, -0.09f, 0.01);
+
+	glColor3f(0.9f, 0.7f, 0.0f);
+	drawFilledCircle(0.09f, -0.19f, 0.01);
+
+	//left side to make the body even
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+
+	//right side to make the body even
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+
+
+
+
+	////right hand  
+	//glPushMatrix();
+	//glPushMatrix();
+	//glColor3f(0.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.09f, 0); // Apply translation
+	//glScalef(0.18, 0.76, 1); // Apply scaling
+
+	////R
+	//glTranslatef(0.8, -0.23, 0.0);
+	//glScalef(0.6, 0.6, 1.0);
+
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+
+	////fist
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//drawFilledCircle(0.5f, -0.3f, 0.05);
+
+	////left hand
+	//glPushMatrix();
+	//glColor3f(0.0f, 0.0f, 0.0f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.09f, 0); // Apply translation
+	//glScalef(0.18, 0.76, 1); // Apply scaling
+
+	////R
+	//glTranslatef(-1.91, -0.23, 0.0);
+	//glScalef(0.6, 0.6, 1.0);
+
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	////fist
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//drawFilledCircle(-0.5f, -0.3f, 0.05);
+
+	//// hover ray
+	//glPushMatrix();
+	//glColor4f(0.0f, 0.0f, 0.0f, 0.7f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.399f, -0.4f, 0); // Apply translation
+	//glScalef(-0.65, -0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+
+
+	//cloth outline
+	glLineWidth(0.5);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glVertex2f(0.2f, 0.27f);
+	glVertex2f(0.2f, 0.19f);
+	glVertex2f(0.1f, 0.19f);
+	glVertex2f(0.16f, 0.16f);
+	glVertex2f(0.0f, 0.1f);
+
+	glVertex2f(0.0f, 0.1f);
+	glVertex2f(-0.16f, 0.16f);
+	glVertex2f(-0.1f, 0.19f);
+	glVertex2f(-0.2f, 0.19f);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(0.0f, 0.1f);
+	glVertex2f(0.0f, -0.37f);
+	glEnd();
+
+
+
+	//tie
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.0f, 0.0f);
+	glVertex2f(0.1f, 0.27);
+	glVertex2f(0.0f, 0.145);
+	glVertex2f(-0.1f, 0.27f);
+	glEnd();
+
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.1f, 0.27);
+	glVertex2f(0.0f, 0.145);
+	glVertex2f(-0.1f, 0.27f);
+	glEnd();
+
+	////الراس////
+   //حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.398f, 0.232f, 0); // Apply translation
+	//glScalef(0.20, 0.12, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+	//mouth outline
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.4f, 0.12f, 0); // Apply translation
+	//glScalef(0.17, 0.09, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//// mouth
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	////glColor3f(1.0f, 0.0f, 0.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.4f, 0.12f, 0); // Apply translation
+	//glScalef(0.18, 0.05, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//teeth
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+
+}
+
+void JobW()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(0.25f, 0.44f); // Set starting position for text
+	const char* text = "- WAITER -"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void JobT()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(0.25f, 0.44f); // Set starting position for text
+	const char* text = "- TEACHER -"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void waiterInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Imagine going to a restaurant and being served by a robot!\n"
+		"Meet the waiter robot, a friendly and helpful machine\n"
+		"designed to bring you food and drinks. This special robot is \n"
+		"equipped with sensors and cameras to navigate around the \n"
+		"restaurant without bumping into things. It has a tray \n"
+		"or compartments to carry your delicious meals and beverages.\n" // Text to display
+		"The waiter robot moves smoothly and gracefully,gliding\n"
+		"from table to table,and it even has a screen or voice to\n"
+		"communicatewith you.\n";
+
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+void teacherInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Imagine having a robot as your teacher in the classroom!\n"
+		"Meet the teacher robot, a smart and interactive machine \n"
+		"This special robot is equipped with a screen or projector \n"
+		"to display educational content, and it can even write on a\n"
+		"whiteboard or interact with digital devices. The teacher\n"
+		"robot has a vast database of information and can answer\n" // Text to display
+		"your questions in a fun and engaging way. It can adapt\n"
+		"its teaching style to suit your needs and provide\n"
+		"personalized learning experiences. \n";
+
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+}
+
+void question1() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(4);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.5f, 0.48f); // right to the b l
+	glVertex2f(0.4f, 0.42f);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glVertex2f(0.4f, 0.48f); // right to the b l
+	glVertex2f(0.5f, 0.42f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+
+	const char* text = "1) What is the main job of a waiter robot?\n"
+		"       a) Cook                    b) Serve \n\n"
+		"2) What is the main role of a teacher robot?\n"
+		"       c) Facilitate learning   d)Grade papers \n\n"
+		"3) What type of tools does the doctor robot use for examination?\n\n"
+		"       e) Sensors               f)Microscope"; // Text to display
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+}
+
+
+void doctor()
+{
+	glPushMatrix();
+	glScalef(1.03, 1.03, 1.03);
+	// يسار الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glPopMatrix();
+	///الجسم
+	// يسار الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+	//اكسسوار يسار 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.1);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.2f, 0.1f, 0.099);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.2f, 0.1f, 0.089);
+
+	////الراس////
+	//حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.65f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+	////الفم////
+
+	//حول الفم
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	//glScalef(0.32, 0.22, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//// الفم
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.44f, 0); // Apply translation
+	//glScalef(0.3, 0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//اسنان
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+
+	////اليد ////
+
+	 //اليمين
+
+	 // حول اليد 
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.04f, 0); // Apply translation
+	//glScalef(0.2, 0.8, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.5f, 0.04f, 0); // Apply translation
+	//glScalef(0.18, 0.76, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//اليسار
+
+	// حول اليد 
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.8f, 0.9f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	//glScalef(-0.2, 0.8, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//glPushMatrix();
+	//glColor3f(0.7f, 0.7f, 0.8f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.5f, 0.04f, 0); // Apply translation
+	//glScalef(-0.18, 0.76, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	// الظل 
+	//glPushMatrix();
+	//glColor3f(0.3f, 0.3f, 0.3f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.0f, -0.6f, 0); // Apply translation
+	//glScalef(-0.65, -0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+
+	//ملابس الطبيب
+	// 
+	// يسار الجسم 
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// يسار الجسم 
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// وسط الجسم 
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.2f, 0.27f);
+	glVertex2f(0.2f, 0.19f);
+	glVertex2f(0.1f, 0.19f);
+	glVertex2f(0.16f, 0.16f);
+	glVertex2f(0.0f, 0.1f);
+
+	glVertex2f(0.0f, 0.1f);
+	glVertex2f(-0.16f, 0.16f);
+	glVertex2f(-0.1f, 0.19f);
+	glVertex2f(-0.2f, 0.19f);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(0.0f, 0.1f);
+	glVertex2f(0.0f, -0.37f);
+	glEnd();
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.040f, -0.050f, 0.025);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.040f, -0.19f, 0.025);
+
+	glLineWidth(4.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(0.50f, 0.50f, 0.50f);
+	glVertex2f(-0.24f, 0.28f);
+	glVertex2f(-0.24f, 0.1f);
+	glEnd();
+
+	glLineWidth(4.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(0.50f, 0.50f, 0.50f);
+	glVertex2f(-0.30f, -0.15f);
+	glVertex2f(-0.34f, -0.15f);
+	glVertex2f(-0.24f, 0.1f);
+	glVertex2f(-0.14f, -0.15f);
+	glVertex2f(-0.18f, -0.15f);
+	glEnd();
+	glColor3f(0.25f, 0.25f, 0.25f);
+	drawFilledCircle(-0.18f, -0.15f, 0.018);
+	glColor3f(0.25f, 0.25f, 0.25f);
+	drawFilledCircle(-0.30f, -0.15f, 0.018);
+
+	glBegin(GL_LINES);
+	glColor3f(0.50f, 0.50f, 0.50f);
+	glVertex2f(0.24f, 0.28f);
+	glVertex2f(0.24f, 0.050f);
+	glEnd();
+	glColor3f(0.70f, 0.70f, 0.70f);
+	drawFilledCircle(0.24f, 0.050f, 0.079);
+	glColor3f(0.60f, 0.60f, 0.60f);
+	drawFilledCircle(0.24f, 0.050f, 0.045);
+	glColor3f(0.79f, 0.79f, 0.79f);
+	drawFilledCircle(0.24f, 0.050f, 0.040);
+
+}
+
+void JobD()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.2f, 0.4f); // right to the b l
+	glVertex2f(0.2f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, 0.4f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(0.25f, 0.44f); // Set starting position for text
+	const char* text = "- DOCTOR -"; // Text to display
+	for (const char* c = text; *c != '\0'; ++c) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+	}
+
+}
+
+void doctorInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Imagine going to a doctor's office and being greeted by\n"
+		"a robot! Meet the doctor robot, a cutting-edge machine\n"
+		"designed to provide medical care and assistance.This \n"
+		"special robot is equipped with advanced sensors and \n"
+		"diagnostic tools to examine patients and gather important \n"
+		"health information. It has a screen or display that can \n" // Text to display
+		"show medical images and provide explanations. The doctor\n"
+		"robot uses artificial intelligence to analyze symptoms\n"
+		"and medical data to make accurate diagnoses. \n";
+
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+void Fcar1()
+{
+	// دوائر صغيرة للزاوية للواجهه
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawFilledCircle(-0.247f, 0.457f, 0.015);
+	drawFilledCircle(0.247f, 0.457f, 0.015);
+	//مراية يمين
+	//glPushMatrix();
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.46f, 0.36f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(1.85, -0.2, 0.0);
+	//glScalef(0.5, 0.5, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//
+	//glPushMatrix();
+	//glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.46f, 0.36f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(1.85, -0.2, 0.0);
+	//glScalef(0.47, 0.47, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	//مرايه يسار
+	//glPushMatrix();
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.46f, 0.36f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(-1.85, -0.2, 0.0);
+	//glScalef(0.5, 0.5, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	////
+	//glPushMatrix();
+	//glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.46f, 0.36f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(-1.85, -0.2, 0.0);
+	//glScalef(0.47, 0.47, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+
+	// ابيض واجهه
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.25f, 0.46f);
+	glVertex2f(0.25f, 0.46f);
+	glVertex2f(0.25f, 0.3f);
+	glVertex2f(-0.25f, 0.3f);
+	glEnd();
+	// مثلث يسار 
+	glBegin(GL_TRIANGLES);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.25f, 0.457f);
+	glVertex2f(-0.29f, 0.3f);
+	glVertex2f(-0.25f, 0.3f);
+	glEnd();
+	// مثلث يمين 
+	glBegin(GL_TRIANGLES);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.25f, 0.457f);
+	glVertex2f(0.29f, 0.3f);
+	glVertex2f(0.25f, 0.3f);
+	glEnd();
+	// خط فوق للواجهه
+	glLineWidth(6);
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.25f, 0.457f);
+	glVertex2f(0.25f, 0.457f);
+	glEnd();
+	//خط يسار للواجهه
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.25f, 0.45f);
+	glVertex2f(-0.29f, 0.3f);
+	glEnd();
+	//خط يمين للواجهه
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.25f, 0.45f);
+	glVertex2f(0.29f, 0.3f);
+	glEnd();
+	// جسم السيارة
+	glBegin(GL_QUADS);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.3f, 0.14f);
+	glVertex2f(0.3f, 0.14f);
+	glVertex2f(0.3f, 0.32f);
+	glVertex2f(-0.3f, 0.32f);
+	glEnd();
+	// كفرات سيارة يمين 
+	glBegin(GL_QUADS);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.27f, 0.14f);
+	glVertex2f(-0.13f, 0.14f);
+	glVertex2f(-0.13f, 0.09f);
+	glVertex2f(-0.27f, 0.09f);
+	glEnd();
+	// كفرات سيارة يمين 
+	glBegin(GL_QUADS);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.27f, 0.14f);
+	glVertex2f(0.13f, 0.14f);
+	glVertex2f(0.13f, 0.09f);
+	glVertex2f(0.27f, 0.09f);
+	glEnd();
+	//// نار ف النص 
+	// شعلة
+	//glPushMatrix();
+	//glColor4f(1.0f, 1.0f, 0.7f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.0f, 0.07f, 0); // Apply translation
+	//glScalef(0.09, 0.19, 1); // Apply scaling
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.065f, 0.14f);
+	glVertex2f(-0.065f, 0.14f);
+	glVertex2f(-0.065f, 0.09f);
+	glVertex2f(0.065f, 0.09f);
+	glEnd();
+	//
+	glLineWidth(3);
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.06f, 0.08f);
+	glVertex2f(0.06f, 0.08f);
+	glEnd();
+
+	//// لمبات يمين 
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(0.14f, 0.169f);
+	glVertex2f(0.1f, 0.169f);
+	glVertex2f(0.1f, 0.15f);
+	glVertex2f(0.14f, 0.15f);
+	glEnd();
+	//
+	//glPushMatrix();
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(-0.24f, 0.27f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(1.0, -0.2, 0.0);
+	//glScalef(0.23, 0.23, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//// لمبات يسار
+	glBegin(GL_QUADS);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.14f, 0.169f);
+	glVertex2f(-0.1f, 0.169f);
+	glVertex2f(-0.1f, 0.15f);
+	glVertex2f(-0.14f, 0.15f);
+	glEnd();
+	//
+	//glPushMatrix();
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glLoadIdentity(); // Reset the transformation matrix
+	//glTranslatef(0.24f, 0.27f, 0); // Apply translation
+	//glScalef(0.4, 0.3, 1); // Apply scaling
+	//glTranslatef(-1.0, -0.2, 0.0);
+	//glScalef(0.23, 0.23, 1.0);
+	//drawOval();
+	//glFlush();
+	//glPopMatrix();
+	//ف النص خطوط
+	glLineWidth(2);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.1f, 0.19f);
+	glVertex2f(0.1f, 0.19f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.09f, 0.2f);
+	glVertex2f(0.09f, 0.2f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.09f, 0.17f);
+	glVertex2f(0.09f, 0.17f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.1f, 0.18f);
+	glVertex2f(0.1f, 0.18f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.09f, 0.16f);
+	glVertex2f(0.09f, 0.16f);
+	glEnd();
+
+	// خط الصعود
+	glLineWidth(4);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	// يمين
+	glBegin(GL_LINES);
+	glVertex2f(0.17f, 0.05f);
+	glVertex2f(0.17f, -0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(0.22f, 0.07f);
+	glVertex2f(0.22f, -0.01f);
+	glEnd();
+	// يسار 
+	glBegin(GL_LINES);
+	glVertex2f(-0.17f, 0.05f);
+	glVertex2f(-0.17f, -0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.22f, 0.07f);
+	glVertex2f(-0.22f, -0.01f);
+	glEnd();
+	// جناح يمين
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+
+	glVertex2f(0.26f, 0.45f);
+	glVertex2f(0.29f, 0.41f);
+	glVertex2f(0.3f, 0.3f);
+	glVertex2f(0.58f, 0.45f);
+	glEnd();
+
+	// جناح يسار
+	glBegin(GL_TRIANGLE_STRIP);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+
+	glVertex2f(-0.26f, 0.45f);
+	glVertex2f(-0.29f, 0.41f);
+	glVertex2f(-0.3f, 0.3f);
+	glVertex2f(-0.58f, 0.45f);
+	glEnd();
+
+}
+void Fcar2()
+{
+
+	// يسار الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.2f, -0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.2f, -0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, -0.27);
+	glVertex2f(0.0f, -0.1);
+	glVertex2f(-0.2f, -0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.23f, 0.22f);
+	glVertex2f(-0.2f, -0.1f);
+	glVertex2f(-0.38f, -0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.23f, 0.22f);
+	glVertex2f(0.2f, -0.1f);
+	glVertex2f(0.38f, -0.07);
+	glEnd();
+
+	// جناح يمين
+	glBegin(GL_QUADS);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.28f);
+	glVertex2f(0.38f, 0.28f);
+	glVertex2f(0.55f, 0.06f);
+	glVertex2f(0.34f, 0.06f);
+	glEnd();
+	//
+	glLineWidth(2);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.2f, 0.28f);
+	glVertex2f(0.38f, 0.28f);
+	glVertex2f(0.55f, 0.06f);
+	glVertex2f(0.34f, 0.06f);
+	glEnd();
+	//
+	glLineWidth(5);
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.36f, 0.33f);
+	glVertex2f(0.59f, 0.03f);
+	glEnd();
+	// 
+
+	glColor4f(1.0f, 1.0f, 0.7f, 1.0f);
+	drawFilledCircle(0.36f, 0.33f, 0.02);
+
+	// جناح يسار
+	glBegin(GL_QUADS);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.2f, 0.28f);
+	glVertex2f(-0.38f, 0.28f);
+	glVertex2f(-0.55f, 0.06f);
+	glVertex2f(-0.34f, 0.06f);
+	glEnd();
+	//
+	glLineWidth(2);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.2f, 0.28f);
+	glVertex2f(-0.38f, 0.28f);
+	glVertex2f(-0.55f, 0.06f);
+	glVertex2f(-0.34f, 0.06f);
+	glEnd();
+	//
+	glLineWidth(5);
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.36f, 0.33f);
+	glVertex2f(-0.59f, 0.03f);
+	glEnd();
+	// 
+
+	glColor4f(1.0f, 1.0f, 0.7f, 1.0f);
+	drawFilledCircle(-0.36f, 0.33f, 0.02);
+	//لمبات 
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	drawFilledCircle(-0.25f, -0.16f, 0.07);
+	drawFilledCircle(0.25f, -0.16f, 0.07);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawHollowCircle(-0.25f, -0.16f, 0.02);
+	drawHollowCircle(0.25f, -0.16f, 0.02);
+
+	// حدود الوسط
+	glPushMatrix();
+	glColor4f(0.0f, 0.0f, 0.0f, 0.1f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, -0.10f, 0); // Apply translation
+	glScalef(0.4, 0.3, 1); // Apply scaling
+	glTranslatef(1.5, -0.8, 0.0);
+	glScalef(0.5, 0.7, 1.0);
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// وسط
+	glPushMatrix();
+	glColor4f(1.0f, 1.0f, 1.0f, 0.1f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, -0.10f, 0); // Apply translation
+	glScalef(0.4, 0.3, 1); // Apply scaling
+	glTranslatef(1.5, -0.8, 0.0);
+	glScalef(0.4, 0.6, 1.0);
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// خط الصعود
+	glLineWidth(4);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	// يمين
+	glBegin(GL_LINES);
+	glVertex2f(-0.1f, 0.39f);
+	glVertex2f(-0.18f, 0.59f);
+	glEnd();
+	// يسار
+	glBegin(GL_LINES);
+	glVertex2f(0.1f, 0.39f);
+	glVertex2f(0.18f, 0.59f);
+	glEnd();
+
+}
+void Fcar3()
+{
+	glColor4f(0.8f, 0.8f, 0.8f, 0.9f);
+	drawHollowCircle(-0.6f, -0.12f, 0.22);
+	//
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor4f(0.6f, 0.4f, 0.4f, 1.0f);
+	glVertex2f(-0.45f, -0.1f);
+	glVertex2f(-0.65f, -0.25f);
+	glEnd();
+	glColor4f(1.0f, 0.9f, 0.6f, 1.0f);
+	drawFilledCircle(-0.45f, -0.1f, 0.02);
+	//
+	glColor4f(1.0f, 0.9f, 0.6f, 1.0f);
+	drawFilledCircle(-0.59f, -0.3f, 0.14);
+	//
+	glPushMatrix();
+	glColor4f(0.9f, 0.9f, 0.9f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.58f, -0.24f, 0); // Apply translation
+	glScalef(0.5, 0.3, 1); // Apply scaling
+	/*glTranslatef(1.5, -0.8, 0.0);
+	glScalef(0.4, 0.6, 1.0);*/
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// اكسسوار
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawFilledCircle(-0.5f, -0.19f, 0.02);
+	drawFilledCircle(-0.68f, -0.19f, 0.02);
+
+	glLineWidth(2);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.38f, -0.22f);
+	glVertex2f(-0.777f, -0.22f);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2f(-0.38f, -0.25f);
+	glVertex2f(-0.777f, -0.25f);
+	glEnd();
+
+
+
+}
+void loop()
+{
+	// يسار الجسم 
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawFilledCircle(-0.2f, -0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawFilledCircle(0.2f, -0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.2f, -0.27);
+	glVertex2f(0.0f, -0.1);
+	glVertex2f(-0.2f, -0.27f);
+	glEnd();
+	//جناح
+
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	drawFilledCircle(0.0f, 0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.23f, 0.22f);
+	glVertex2f(-0.2f, -0.1f);
+	glVertex2f(-0.38f, -0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(0.23f, 0.22f);
+	glVertex2f(0.2f, -0.1f);
+	glVertex2f(0.38f, -0.07);
+	glEnd();
+	// خط الصعود
+	glLineWidth(4);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	// يمين
+	glBegin(GL_LINES);
+	glVertex2f(0.17f, 0.05f);
+	glVertex2f(0.17f, -0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(0.22f, 0.07f);
+	glVertex2f(0.22f, -0.01f);
+	glEnd();
+	// يسار 
+	glBegin(GL_LINES);
+	glVertex2f(-0.17f, 0.05f);
+	glVertex2f(-0.17f, -0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(-0.22f, 0.07f);
+	glVertex2f(-0.22f, -0.01f);
+	glEnd();
+}
+void Fcar4()
+{
+	glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer
+	//
+	glBegin(GL_QUADS);
+	glColor4f(0.7f, 0.8f, 1.0f, 1.0f);
+	glVertex2f(-1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(-1.0f, -1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glColor4f(0.7f, 0.8f, 1.0f, 1.0f);
+	glVertex2f(1.0f, 1.0f);
+	glEnd();
+	//
+	roomLines();
+	Fcar1();
+	// ظل
+	glPushMatrix();
+	glColor4f(0.6f, 0.6f, 0.6f, 0.1f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.0f, -0.55f, 0); // Apply translation
+	glScalef(0.6, 0.2, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// حدود سيارة يمين
+	glPushMatrix();
+	glTranslatef(0.6, -0.4, 0.0); //x,y,z
+	glScalef(0.46, 0.46, 1.0);
+	loop();
+	glPopMatrix();
+	glPopMatrix();
+	//
+	glPushMatrix();
+	glTranslatef(0.6, -0.4, 0.0); //x,y,z
+	glScalef(0.43, 0.43, 1.0);
+	Fcar2();
+	glPopMatrix();
+	glPopMatrix();
+	// ظل
+	glPushMatrix();
+	glColor4f(0.6f, 0.6f, 0.6f, 0.1f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(0.599f, -0.63f, 0); // Apply translation
+	glScalef(0.18, 0.06, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	//
+	Fcar3();
+	// ظل
+	glPushMatrix();
+	glColor4f(0.6f, 0.6f, 0.6f, 0.1f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.599f, -0.63f, 0); // Apply translation
+	glScalef(0.18, 0.06, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	glFlush();
+	glutSwapBuffers();
+
+}
+
+void FcarInfo()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Picture a flying car straight out of a science fiction movie,\n"
+		"but here's the twist: it's not designed by humans, but by the\n"
+		"power of artificial intelligence (AI).This AI-generated flying\n"
+		"car is a marvel of technology and creativity.Using advanced\n"
+		"algorithms and machine learning,the AI has crafted a sleek\n"
+		" and futuristic vehicle that combines the best features of a\n" // Text to display
+		"car and an aircraft.It has cool gull-wing doors,\n"
+		" a streamlined body, and powerful propulsion systems.\n";
+		
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+void story()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glLineWidth(1);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.5f, -0.5f); // right to the b l
+	glVertex2f(-0.5f, 0.5f); // b l
+	glVertex2f(0.5f, 0.5f); // t l 
+	glVertex2f(0.5f, -0.5f); // t r 
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f); // Set text color to black
+	glRasterPos2f(-0.45f, 0.4f); // Set starting position for text
+	const char* text = "Picture a flying car straight out of a science fiction movie,\n"
+		"but here's the twist: it's not designed by humans, but by the\n"
+		"power of artificial intelligence (AI).This AI-generated flying\n"
+		"car is a marvel of technology and creativity.Using advanced\n"
+		"algorithms and machine learning,the AI has crafted a sleek\n"
+		" and futuristic vehicle that combines the best features of a\n" // Text to display
+		"car and an aircraft.It has cool gull-wing doors,\n"
+		" a streamlined body, and powerful propulsion systems.\n";
+
+
+	float yPos = 0.4f; // Initial y-position
+
+	for (const char* c = text; *c != '\0'; ++c) {
+		if (*c == '\n') {
+			// Move to the next line
+			yPos -= 0.1f;
+			glRasterPos2f(-0.45f, yPos);
+		}
+		else {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c); // Display each character
+		}
+	}
+
+}
+
+void robotCall() {
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.0f, 0.03f);
+	glVertex2f(-0.13f, 0.03f);
+	glVertex2f(-0.13f, 0.1f);
+	glVertex2f(0.0f, 0.1f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(-0.03f, 0.03f);
+	glVertex2f(-0.005f, 0.03f);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glLineWidth(1);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.0f, 0.0f); // right to the b l
+	glVertex2f(-0.03f, 0.03f);
+	glVertex2f(-0.13f, 0.03f);
+	glVertex2f(-0.13f, 0.1f);
+	glVertex2f(0.0f, 0.1f);
+	glVertex2f(0.0f, 0.0f);
+	glEnd();
+
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	drawCircle(-0.1f, 0.076f, 0.01);
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(-0.1f, 0.076f, 0.01);
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	drawCircle(-0.06f, 0.076f, 0.01);
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(-0.06f, 0.076f, 0.01);
+	
+	glColor3f(1.0f, 1.0f, 0.0f);
+	drawCircle(-0.02f, 0.076f, 0.01);
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(-0.02f, 0.076f, 0.01);
+
+}
+
+void roof() {
+
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 1.0f, 0.9f);
+	glVertex2f(-1.0f, 0.7f);   // Top-left vertex
+	glVertex2f(1.0f, 0.7f);    // Top-right vertex
+	glVertex2f(0.64f, 0.55f);  // Bottom-right vertex
+	glVertex2f(-1.0f, 0.58f);  // Bottom-left vertex
+	glEnd();
+}
+
+void wall3() {
+	glBegin(GL_QUADS);
+	glColor3f(0.0f, 0.1f, 0.0f);
+	glVertex2f(-1.0f, 0.58f);   // Top-left vertex
+	glVertex2f(-0.64f, 0.55f); // Top-right vertex
+	glVertex2f(-0.64f, -0.3f); // Bottom-right vertex
+	glVertex2f(-1.0f, -0.68f); // Bottom-left vertex
+	glEnd();
+}
+
+void floor() {
+	glBegin(GL_QUADS);
+	glColor3f(0.7f, 0.3f, 0.0f); // Base color for the wooden floor
+	glVertex2f(-1.0f, -0.3f);
+	glVertex2f(1.0f, -0.3f);
+	glVertex2f(1.0f, -0.66f);
+	glVertex2f(-1.0f, -0.66f);
+	glEnd();
+
+	// Add wooden plank lines
+	glLineWidth(1.0); // Set line width
+	glColor3f(0.3f, 0.15f, 0.0f); // Color for the wooden planks
+
+	glBegin(GL_LINES);
+
+	// Draw horizontal lines
+	glVertex2f(-1.0f, -0.36f);
+	glVertex2f(0.7f, -0.36f);
+
+	glVertex2f(-1.0f, -0.42f);
+	glVertex2f(0.75f, -0.42f);
+
+	glVertex2f(-1.0f, -0.48f);
+	glVertex2f(0.82, -0.48f);
+
+	glVertex2f(-1.0f, -0.54f);
+	glVertex2f(0.88f, -0.54f);
+
+	glVertex2f(-1.0f, -0.60f);
+	glVertex2f(0.94f, -0.60f);
+
+	glEnd();
+}
+
+void wall1() {
+
+	glBegin(GL_QUADS);
+	glColor3f(0.1f, 0.2f, 0.1f);
+	glVertex2f(-0.2f, -0.60f);
+	glVertex2f(-0.2f, 0.7f);
+	glVertex2f(-0.64f, 0.55f);
+	glVertex2f(-0.64f, -0.3f);
+	glEnd();
+
+}
+
+// wall outline
+void wallbreak() {
+	glLineWidth(1.0); // Set line width
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex2f(-0.2f, -0.6f); // Bottom-left vertex
+	glVertex2f(-0.2f, 0.7f);  // Top-left vertex
+	glEnd();
+
+}
+
+void wall2() {
+	glBegin(GL_QUADS);
+	glColor3f(0.1f, 0.2f, 0.0f);
+	glVertex2f(-0.2f, -0.6f); // Bottom-left vertex
+	glVertex2f(-0.2f, 0.7f);  // Top-left vertex
+	glVertex2f(1.0f, 0.7f);   // Top-right vertex
+	glVertex2f(1.0f, -0.6f);  // Bottom-right vertex
+	glEnd();
+}
+
+void closet() {
+	glBegin(GL_QUADS);
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glVertex2f(-0.1f, -0.6f);
+	glVertex2f(1.0f, -0.6f);
+	glVertex2f(1.0f, 0.7f);
+	glVertex2f(-0.1f, 0.7f);
+	glEnd();
+}
+
+// closet outline
+void outcloset() {
+	glLineWidth(3.0); // Set line width to 3.0 units
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.1f, -0.6f);
+	glVertex2f(1.0f, -0.6f);
+	glVertex2f(1.0f, 0.7f);
+	glVertex2f(-0.1f, 0.7f);
+	glEnd();
+}
+
+// impo outline
+void outcloset2() {
+	glLineWidth(3.0); // Set line width to 3.0 units
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+
+	// Bottom-left vertex
+	glVertex2f(-0.05f, -0.55f);
+
+	// Bottom-right vertex
+	glVertex2f(0.95f, -0.55f);
+
+	// Top-right vertex
+	glVertex2f(0.95f, 0.65f);
+
+	// Top-left vertex
+	glVertex2f(-0.05f, 0.65f);
+
+	glEnd();
+}
+
+
+void outcloset3() {
+	glBegin(GL_QUADS);
+	glColor3f(0.4f, 0.4f, 0.4f);
+	glVertex2f(-0.05f, -0.55f);
+	glVertex2f(0.95f, -0.55f);
+	glVertex2f(0.95f, 0.65f);
+	glVertex2f(-0.05f, 0.65f);
+	glEnd();
+}
+
+//datail
+void outcloset4() {
+	glBegin(GL_QUADS);
+	glColor3f(0.3f, 0.3f, 0.3f);
+
+	// Bottom-left vertex
+	glVertex2f(0.1f, -0.4f);
+
+	// Bottom-right vertex
+	glVertex2f(0.8f, -0.4f);
+
+	// Top-right vertex
+	glVertex2f(0.8f, 0.5f);
+
+	// Top-left vertex
+	glVertex2f(0.1f, 0.5f);
+
+	glEnd();
+}
+
+//inner closet outline
+void outcloset5() {
+	glLineWidth(1.0); // Set line width to 3.0 units
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+
+	// Bottom-left vertex
+	glVertex2f(0.1f, -0.4f);
+
+	// Bottom-right vertex
+	glVertex2f(0.8f, -0.4f);
+
+	// Top-right vertex
+	glVertex2f(0.8f, 0.5f);
+
+	// Top-left vertex
+	glVertex2f(0.1f, 0.5f);
+
+	glEnd();
+}
+
+// closet line
+void cline() {
+	glLineWidth(1.0); // Set line width to 3.0 units
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+
+	// Bottom-left vertex
+	glVertex2f(-0.05f, -0.55f);
+	glVertex2f(0.1f, -0.4f);
+
+	// Bottom-right vertex
+	glVertex2f(0.95f, -0.55f);
+	glVertex2f(0.8f, -0.4f);
+
+
+	// Top-right vertex
+	glVertex2f(0.95f, 0.65f);
+	glVertex2f(0.8f, 0.5f);
+
+
+	// Top-left vertex
+	glVertex2f(-0.05f, 0.65f);
+	glVertex2f(0.1f, 0.5f);
+
+	glEnd();
+}
+
+void drawShelf() {
+
+	//first shelf
+	glBegin(GL_QUADS);
+	glColor3f(0.2f, 0.2f, 0.1f); // Dark gray color for the shelf
+
+
+	glVertex2f(0.1f, -0.32f);  // top-left vertex
+	glVertex2f(0.8f, -0.32f);  // top-right vertex
+	glVertex2f(0.95f, -0.48f);  // Bottom-right vertex
+	glVertex2f(-0.05f, -0.48f);  // buttom-left vertex
+
+	glEnd();
+
+	//second shelf
+	glBegin(GL_QUADS);
+	glColor3f(0.2f, 0.2f, 0.1f); // Dark gray color for the shelf
+
+	glVertex2f(0.1f, -0.0f);    // top-left vertex
+	glVertex2f(0.8f, -0.0f);    // top-right vertex
+	glVertex2f(0.95f, -0.1f);   // Bottom-right vertex
+	glVertex2f(-0.05f, -0.1f);  // buttom-left vertex
+
+	glEnd();
+
+	// third shelf
+	glBegin(GL_QUADS);
+	glColor3f(0.2f, 0.2f, 0.1f); // Dark gray color for the shelf
+
+
+	glVertex2f(0.1f, 0.4f);    // top-left vertex
+	glVertex2f(0.8f, 0.4f);    // top-right vertex
+	glVertex2f(0.95f, 0.3f);   // Bottom-right vertex
+	glVertex2f(-0.05f, 0.3f);  // buttom-left vertex
+
+	glEnd();
+
+
+
+}
+
+void handWatch()
+{
+	// ساعه
+	glBegin(GL_QUADS);
+	glColor3f(0.6f, 0.5f, 0.5f);
+	glVertex2f(0.59f, -0.055);
+	glVertex2f(0.59f, -0.085f);
+	glVertex2f(0.41f, -0.085f);
+	glVertex2f(0.41f, -0.055f);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.5, -0.070, 0.045);
+
+	glColor3f(0.90f, 0.90f, 0.90f);
+	drawFilledCircle(0.5, -0.070, 0.040);
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.53f, -0.070f);
+	glVertex2f(0.5f, -0.070f);
+	glVertex2f(0.5f, -0.067f);
+	glEnd();
+}
+
+void uniform()
+{
+	// بدله
+	// يسار الجسم 
+
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.2f, -0.3f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale the uniform
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// يسار الجسم 
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// وسط الجسم 
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.0);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(-0.050, 0.27f);
+	glVertex2f(0.0f, 0.21f);
+	glVertex2f(0.050f, 0.27f);
+	glEnd();
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.0f, 0.25f);
+	glVertex2f(0.040f, 0.21f);
+	glVertex2f(0.0f, 0.17f);
+	glVertex2f(-0.040f, 0.21f);
+	glEnd();
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.0f, 0.22f);
+	glVertex2f(0.030f, 0.040f);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(-0.030f, 0.040);
+	glEnd();
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	//خطوط اللبس
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.50f, 0.50f, 0.50f);
+	glVertex2f(0.2f, 0.27f);
+	glVertex2f(0.24f, 0.2f);
+	glVertex2f(0.14f, 0.18f);
+	glVertex2f(0.2f, 0.14f);
+	glVertex2f(0.0f, 0.0f);
+
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(-0.2f, 0.14f);
+	glVertex2f(-0.14f, 0.18f);
+	glVertex2f(-0.24f, 0.2f);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(0.0f, -0.37f);
+	glEnd();
+
+	glColor3f(0.9f, 0.7f, 0.0f);
+	drawFilledCircle(0.040f, -0.1f, 0.018);
+	glColor3f(0.9f, 0.7f, 0.0f);
+	drawFilledCircle(0.040f, -0.19f, 0.018);
+	glPopMatrix();  // Restore the previous matrix state (removing the applied transformations)
+}
+
+
+void robot()
+{
+	////الجسم////
+
+	 ////////حدود///////
+
+	glPushMatrix();
+	glScalef(1.03, 1.03, 1.03);
+	// يسار الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glPopMatrix();
+	///الجسم
+	// يسار الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+	//اكسسوار يسار 
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.2f, 0.1f, 0.1);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.2f, 0.1f, 0.099);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.2f, 0.1f, 0.089);
+
+	////الراس////
+	//حول الاشارة ص
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.199f, 0.7f, 0.1);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(-0.191f, 0.71f, 0.1);
+	//  صغير
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.19f, 0.7f, 0.1);
+	//  كبير   
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(0.0f, 0.59f, 0.28);
+	// خط الاشارة
+	glLineWidth(3.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.25f, 0.75f);
+	glVertex2f(-0.5f, 0.9f);
+	glEnd();
+	//  صغير للاشارة   
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, 0.9f, 0.04);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawFilledCircle(-0.5f, 0.9f, 0.02);
+	//حول  الاشارة الصغير
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.5f, 0.9f, 0.036);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.5f, 0.9f, 0.04);
+	//حول الراس
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.0f, 0.59f, 0.26);
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawHollowCircle(0.0f, 0.59f, 0.28);
+
+	//// العيون////
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.8f, 0.9f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.6f, 0.2f, 0); // Apply translation
+	glScalef(0.25, 0.15, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+	// العين اليمين
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.06);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+	//
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(0.1f, 0.65f, 0.05);
+	// العين اليسار
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.06);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	drawHollowCircle(-0.1f, 0.65f, 0.05);
+
+
+
+	//اسنان
+
+	glLineWidth(1.0);
+	glBegin(GL_LINE_STRIP);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glVertex2f(-0.15f, 0.443f);
+	glVertex2f(-0.12f, 0.47f);
+	glVertex2f(-0.11f, 0.4f);
+	glVertex2f(-0.1f, 0.48f);
+	glVertex2f(-0.09f, 0.4f);
+	glVertex2f(-0.08f, 0.48f);
+	glVertex2f(-0.07f, 0.4f);
+	glVertex2f(-0.06f, 0.48f);
+	glVertex2f(-0.05f, 0.4f);
+	glVertex2f(-0.04f, 0.48f);
+	glVertex2f(-0.03f, 0.4f);
+	glVertex2f(-0.02f, 0.48f);
+	glVertex2f(-0.01f, 0.4f);
+	glVertex2f(0.0f, 0.48f);
+	glVertex2f(0.01f, 0.4f);
+	glVertex2f(0.02f, 0.48f);
+	glVertex2f(0.03f, 0.4f);
+	glVertex2f(0.04f, 0.48f);
+	glVertex2f(0.05f, 0.4f);
+	glVertex2f(0.06f, 0.48f);
+	glVertex2f(0.07f, 0.4f);
+	glVertex2f(0.08f, 0.48f);
+	glVertex2f(0.09f, 0.4f);
+	glVertex2f(0.1f, 0.48f);
+	glVertex2f(0.11f, 0.4f);
+	glVertex2f(0.12f, 0.47f);
+	glVertex2f(0.15f, 0.443f);
+	glEnd();
+
+	////اليد ////
+
+	 //اليمين
+
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.26f, -0.23f, 0); // Apply translation
+	glScalef(0.2, 0.7, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	//اليسار
+
+
+
+	glPushMatrix();
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.94f, -0.23f, 0); // Apply translation
+	glScalef(0.2, 0.7, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+
+	// الظل 
+	glPushMatrix();
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glLoadIdentity(); // Reset the transformation matrix
+	glTranslatef(-0.6f, -0.55f, 0); // Apply translation
+	glScalef(-0.4, -0.19, 1); // Apply scaling
+	drawOval();
+	glFlush();
+	glPopMatrix();
+}
+
+
+void Note()
+{
+	// دفتر 
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.0f, 0.05f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.9f, 0.6f);
+	glVertex2f(0.35f, 0.1f);
+	glVertex2f(0.65f, 0.1f);
+	glVertex2f(0.5f, -0.2f);
+	glVertex2f(0.2f, -0.2f);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glColor3f(0.8f, 0.5f, 0.0f);
+	glVertex2f(0.39f, 0.05f);
+	glVertex2f(0.55f, 0.05f);
+	glVertex2f(0.47f, -0.05f);
+	glVertex2f(0.32f, -0.05f);
+	glEnd();
+
+
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.8f, 0.5f, 0.0f);
+	glVertex2f(0.35f, 0.1f);
+	glVertex2f(0.65f, 0.1f);
+	glVertex2f(0.5f, -0.2f);
+	glVertex2f(0.2f, -0.2f);
+	glEnd();
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(0.5f, -0.15f, 0.05);
+
+	glColor3f(0.8f, 0.5f, 0.0f);
+	drawFilledCircle(0.25f, -0.1f, 0.025);
+	drawFilledCircle(0.29f, 0.0f, 0.025);
+	drawFilledCircle(0.33f, 0.07f, 0.025);
+	glPopMatrix();
+}
+
+void T()
+{
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.8f, -0.3f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	// بلوزة الغيمة 
+	glColor3f(0.1f, 0.2f, 0.7f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+
+	// يمين الجسم 
+	glColor3f(0.1f, 0.2f, 0.7f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	// وسط الجسم 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.1);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glColor3f(0.1f, 0.2f, 0.7f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+
+	glColor3f(0.7f, 0.8f, 0.9f);
+	drawFilledCircle(-0.5f, -0.15f, 0.05);
+	glColor3f(0.3f, 0.9f, 1.0f);
+	drawFilledCircle(0.1f, -0.1f, 0.1);
+	drawFilledCircle(-0.1f, -0.1f, 0.1);
+	drawFilledCircle(0.0f, 0.0f, 0.11);
+	drawFilledCircle(0.0f, -0.1f, 0.1);
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.7f, 0.7f, 0.8f);
+	glVertex2f(0.19f, 0.27);
+	glVertex2f(0.0f, 0.09);
+	glVertex2f(-0.19f, 0.27f);
+	glEnd();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.3f, 0.9f, 1.0f);
+	glVertex2f(0.19f, 0.27);
+	glVertex2f(0.0f, 0.09);
+	glVertex2f(-0.19f, 0.27f);
+	glEnd();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.3f, 0.9f, 1.0f);
+	glVertex2f(0.19f, 0.27);
+	glVertex2f(0.0f, 0.09);
+	glVertex2f(-0.19f, 0.27f);
+	glEnd();
+
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glColor3f(0.3f, 0.9f, 1.0f);
+	glVertex2f(0.0f, -0.25);
+	glVertex2f(0.0f, -0.35);
+	glVertex2f(0.1f, -0.21);
+	glVertex2f(0.1f, -0.31);
+	glVertex2f(-0.1f, -0.21);
+	glVertex2f(-0.1f, -0.31);
+	glEnd();
+	glPopMatrix();
+}
+
+void F()
+{
+	// فيونكة 
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.8f, -0.5f, 0.5f); // Translate the uniform
+	glScalef(0.6f, 0.6f, 0.6f);  // Scale 
+	glColor3f(1.0f, 0.8f, 0.9f);
+	drawFilledCircle(0.2f, 0.8f, 0.05);
+	drawFilledCircle(0.11f, 0.8f, 0.05);
+	drawFilledCircle(0.15f, 0.85f, 0.05);
+	glColor3f(1.0f, 1.0f, 0.0f);
+	drawFilledCircle(0.15f, 0.82f, 0.02);
+	glPopMatrix();
+}
+
+void mask()
+{
+	// كمامة 
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.7f, -0.2f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	glBegin(GL_QUADS);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(-0.15f, 0.55f);
+	glVertex2f(0.15f, 0.55f);
+	glVertex2f(0.15f, 0.4f);
+	glVertex2f(-0.15f, 0.4f);
+	glEnd();
+
+	glLineWidth(4.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.15f, 0.55f);
+	glVertex2f(0.15f, 0.55f);
+	glVertex2f(0.15f, 0.4f);
+	glVertex2f(-0.15f, 0.4f);
+	glEnd();
+
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.15f, 0.49f);
+	glVertex2f(0.15f, 0.49f);
+	glVertex2f(-0.15f, 0.45f);
+	glVertex2f(0.15f, 0.45f);
+	glVertex2f(-0.15f, 0.55f);
+	glVertex2f(-0.3f, 0.65f);
+	glVertex2f(0.15f, 0.55f);
+	glVertex2f(0.3f, 0.65f);
+	glVertex2f(0.15f, 0.4f);
+	glVertex2f(0.19f, 0.35f);
+	glVertex2f(-0.15f, 0.4f);
+	glVertex2f(-0.19f, 0.35f);
+	glEnd();
+	glPopMatrix();
+}
+
+void hat()
+{
+
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.7f, 0.0f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	glBegin(GL_QUADS);
+
+	glColor3f(0.8f, 0.0f, 0.0f);  //hat
+	glVertex2f(-0.2f, 0.85f);
+	glVertex2f(0.2f, 0.85f);
+	glVertex2f(0.2f, 0.75f);
+	glVertex2f(-0.2f, 0.75f);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(-0.15f, 0.99f);
+	glVertex2f(0.15f, 0.99f);
+	glVertex2f(0.15f, 0.85f);
+	glVertex2f(-0.15f, 0.85f);
+	glEnd();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.15f, 0.99f);
+	glVertex2f(0.15f, 0.99f);
+	glVertex2f(0.15f, 0.85f);
+	glVertex2f(-0.15f, 0.85f);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.2f, 0.85f);
+	glVertex2f(0.2f, 0.85f);
+	glVertex2f(0.2f, 0.75f);
+	glVertex2f(-0.2f, 0.75f);
+
+	glEnd();
+	glPopMatrix();
+}
+
+void dress()
+{
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.47f, -0.3f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	// يسار الجسم
+	glColor3f(1.f, 0.5f, 0.7f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم
+	glColor3f(1.f, 0.5f, 0.7f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+
+	glColor3f(1.f, 0.5f, 0.7f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+	//يسار
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.f, 0.5f, 0.7f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.f, 0.5f, 0.7f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glLineWidth(6.0);      // line in dress
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.f, 1.0f, 1.0f);
+	glVertex2f(-0.32f, 0.0f);
+	glVertex2f(0.32f, 0.0f);
+	glEnd();
+	glLineWidth(6.0);      // line in dress
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.f, 1.0f, 1.0f);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(0.0f, 0.14f);
+	glEnd();
+
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawFilledCircle(0.05f, 0.1f, 0.01);  //ازرار
+	drawFilledCircle(0.05f, 0.05f, 0.01);
+	glPopMatrix();
+}
+void Bag()
+{
+	// Bag 
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.2f, 0.13f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+
+	glBegin(GL_QUADS);
+
+	glColor3f(0.9f, 0.4f, 0.8f); // bag
+	glVertex2f(0.35f, 0.0f);
+	glVertex2f(0.65f, 0.0f);
+	glVertex2f(0.7f, -0.4f);
+	glVertex2f(0.3f, -0.4f);
+	glEnd();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.9f, 0.2f, 0.5f); //around bag
+	glVertex2f(0.35f, 0.0f);
+	glVertex2f(0.65f, 0.0f);
+	glVertex2f(0.7f, -0.4f);
+	glVertex2f(0.3f, -0.4f);
+	glEnd();
+
+	glLineWidth(10.0);
+	glBegin(GL_LINES);     // line in bag
+	glColor3f(0.9f, 0.2f, 0.5f);
+	glVertex2f(0.39f, -0.4f);
+	glVertex2f(0.69f, -0.2f);
+	glVertex2f(0.3f, -0.3f);
+	glVertex2f(0.66f, -0.1f);
+	glEnd();
+
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glVertex2f(0.5f, 0.3f);
+	glVertex2f(0.6f, 0. - 0.05f);
+	glVertex2f(0.5f, 0.3f);
+	glVertex2f(0.4f, 0. - 0.05f);
+	glEnd();
+
+	glColor3f(0.9f, 0.2f, 0.5f);
+	drawFilledCircle(0.59f, -0.05f, 0.02);
+	drawFilledCircle(0.4f, -0.05f, 0.02);
+	glPopMatrix();
+}
+void Stick()
+{
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.35f, 0.05f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	glLineWidth(5.0);
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.5f, -0.2f);
+	glVertex2f(0.7f, 0.4f);
+	glEnd();
+
+	glLineWidth(10.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.7f, 0.4f);
+	glVertex2f(0.75f, 0.45f);
+	glVertex2f(0.75f, 0.45f);
+	glVertex2f(0.8f, 0.45f);
+	glVertex2f(0.75f, 0.5f);
+	glVertex2f(0.75f, 0.5f);
+
+	glVertex2f(0.7f, 0.4f);
+	glVertex2f(0.65f, 0.45f);
+	glVertex2f(0.65f, 0.45f);
+	glVertex2f(0.5f, 0.45f);
+	glVertex2f(0.65f, 0.5f);
+	glVertex2f(0.65f, 0.5f);
+
+	glEnd();
+	glPopMatrix();
+}
+
+void TShirt()
+{
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.1f, 0.45f, 0.5f); // Translate the uniform
+	glScalef(0.3f, 0.3f, 0.3f);  // Scale 
+	// بلوزه
+	// يسار الجسم 
+	glColor3f(0.9f, 1.0f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(0.9f, 1.0f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// يسار الجسم 
+	glColor3f(0.9f, 1.0f, 0.8f);
+	drawFilledCircle(-0.2f, 0.1f, 0.18);
+	// يمين الجسم 
+	glColor3f(0.9f, 1.0f, 0.8f);
+	drawFilledCircle(0.2f, 0.1f, 0.18);
+	// وسط الجسم 
+	glColor3f(0.9f, 1.0f, 0.8f);
+	drawFilledCircle(0.0f, -0.1f, 0.26);
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.2f, 0.27);
+	glVertex2f(0.0f, 0.0);
+	glVertex2f(-0.2f, 0.27f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(-0.050, 0.27f);
+	glVertex2f(0.0f, 0.21f);
+	glVertex2f(0.050f, 0.27f);
+	glEnd();
+	glBegin(GL_QUADS);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.0f, 0.25f);
+	glVertex2f(0.040f, 0.21f);
+	glVertex2f(0.0f, 0.17f);
+	glVertex2f(-0.040f, 0.21f);
+	glEnd();
+	glBegin(GL_QUADS);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.0f, 0.22f);
+	glVertex2f(0.030f, 0.040f);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(-0.030f, 0.040);
+	glEnd();
+	//يسار 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(-0.23f, -0.22f);
+	glVertex2f(-0.2f, 0.1f);
+	glVertex2f(-0.38f, 0.07);
+	glEnd();
+	//يمين
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.23f, -0.22f);
+	glVertex2f(0.2f, 0.1f);
+	glVertex2f(0.38f, 0.07);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.0f, 0.27f);
+	glVertex2f(0.050f, 0.13f);
+	glVertex2f(0.1f, 0.27f);
+	glVertex2f(0.1f, 0.32f);
+	glEnd();
+
+
+	glBegin(GL_QUADS);
+	glColor3f(0.9f, 1.0f, 0.8f);
+	glVertex2f(0.0f, 0.27f);
+	glVertex2f(-0.050f, 0.13f);
+	glVertex2f(-0.1f, 0.27f);
+	glVertex2f(-0.1f, 0.32f);
+	glEnd();
+
+	glLineWidth(2.0);
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.6f, 0.8f, 0.7f);
+	glVertex2f(0.0f, 0.27f);
+	glVertex2f(0.01f, 0.2f);
+	glVertex2f(0.1f, 0.27f);
+	glVertex2f(0.1f, 0.32f);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.6f, 0.8f, 0.7f);
+	glVertex2f(0.0f, 0.27f);
+	glVertex2f(-0.01f, 0.2f);
+	glVertex2f(-0.1f, 0.27f);
+	glVertex2f(-0.1f, 0.32f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0.6f, 0.8f, 0.7f);
+	glVertex2f(0.0f, 0.27f);
+	glVertex2f(0.0f, -0.37f);
+	glEnd();
+	glPopMatrix();
+}
+
+void Glasses() {
+	//نظاره
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.3f, 0.1f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	glBegin(GL_QUADS);
+	glColor4f(0.90f, 0.90f, 0.90f, 0.63f);
+	drawFilledCircle(0.1f, 0.65f, 0.08);
+	glLineWidth(5.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+
+	glColor4f(0.90f, 0.90f, 0.90f, 0.70f);
+	drawFilledCircle(-0.1f, 0.65f, 0.08);
+	glLineWidth(5.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.18f, 0.65f);
+	glVertex2f(0.28f, 0.65f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.18f, 0.65f);
+	glVertex2f(-0.28f, 0.65f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.02f, 0.65f);
+	glVertex2f(-0.02f, 0.65f);
+	glEnd();
+	glPopMatrix();
+}
+void SunGlasses() {
+	//نظاره شمسيه
+
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.1f, 0.1f, 0.5f); // Translate the uniform
+	glScalef(0.4f, 0.4f, 0.4f);  // Scale 
+	glColor4f(0.0f, 0.0f, 0.0f, 0.63f);
+	drawFilledCircle(0.1f, 0.65f, 0.08);
+	glLineWidth(5.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(0.1f, 0.65f, 0.08);
+
+	glColor4f(0.0f, 0.0f, 0.0f, 0.70f);
+	drawFilledCircle(-0.1f, 0.65f, 0.08);
+	glLineWidth(5.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawHollowCircle(-0.1f, 0.65f, 0.08);
+
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.18f, 0.65f);
+	glVertex2f(0.28f, 0.65f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(-0.18f, 0.65f);
+	glVertex2f(-0.28f, 0.65f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glVertex2f(0.02f, 0.65f);
+	glVertex2f(-0.02f, 0.65f);
+	glEnd();
+	glPopMatrix();
+}
+void party() {
+	//طربوش حفله
+	glPushMatrix();  // Push the current matrix onto the stack
+	glTranslatef(0.5f, -0.35f, 0.5f); // Translate the uniform
+	glScalef(0.8f, 0.8f, 0.8f);  // Scale 
+	glBegin(GL_TRIANGLES);
+	glColor3f(0.9f, 0.9f, 0.7f);
+	glVertex2f(-0.10f, 0.82f);
+	glVertex2f(0.10f, 0.82f);
+	glVertex2f(0.0f, 0.95f);
+	glEnd();
+
+	glLineWidth(4.4);
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 0.8f, 0.2f);
+	glVertex2f(0.025f, 0.95f);
+	glVertex2f(-0.025f, 0.95f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 0.8f, 0.2f);
+	glVertex2f(0.0f, 0.99f);
+	glVertex2f(0.0f, 0.91f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 0.8f, 0.2f);
+	glVertex2f(0.020f, 0.97f);
+	glVertex2f(-0.020f, 0.93f);
+	glEnd();
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 0.8f, 0.2f);
+	glVertex2f(0.020f, 0.93f);
+	glVertex2f(-0.020f, 0.97f);
+	glEnd();
+	glPopMatrix();
+}
+
+void drawScore() {
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glRasterPos2f(-0.9, -0.6); // Adjust the position as needed
+	std::string scoreStr = "YOUR SCORE: " + std::to_string(score);
+	for (char c : scoreStr) {
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c);
+	}
+}
+
+static
+void special(int key, int x, int y)
+{
+	//handle special keys
+	switch (key) {
+	case GLUT_KEY_HOME:
+
+		break;
+	case GLUT_KEY_LEFT:
+
+		break;
+	case GLUT_KEY_RIGHT:
+
+		break;
+	case GLUT_KEY_UP:
+
+		break;
+	case GLUT_KEY_DOWN:
+
+		break;
+	default:
+		break;
+	}
+}
+
+
+static
+void mouse(int button, int state, int x, int y){
+
+	if (button == GLUT_LEFT_BUTTON){
+		if (state == GLUT_DOWN){
+			// Convert the mouse coordinates to OpenGL coordinates
+			float xPos = (float)x / 700.0f * 2.0f - 1.0f;
+			float yPos = 1.0f - (float)y / 900.0f * 2.0f;
+
+				// Check if the click position is within the shape 
+			//Car
+			if (xPos >= 0.2f && xPos <= 0.8f && yPos >= -0.1f && yPos <= 0.2f) {
+				displayCarInfo = true;
+			}
+			//FlyM
+			if (xPos >= -0.6f && xPos <= -1.0f + 0.7f && yPos >= 0.26f && yPos <= 0.8f ) {
+				displayFlyMInfo = true;
+			}
+			//FLYING CAR
+			if (xPos >= -0.6f && xPos <= -0.1f  && yPos >= 0.1f && yPos <= 0.2f) {
+				displayFcarInfo = true;
+			}
+			//ROBOT DISSAPPEAR
+			if (xPos >= 0.6f && xPos <= 0.6f + 0.6f && yPos >= -0.3f && yPos <= -0.3f + 0.6f) {
+				RobotTalking = false;
+			}
+			//ROBOT APPEAR
+			if (xPos >= 0.7f && xPos <= 0.7f + 0.5f && yPos >= 0.5f && yPos <= 0.2f + 0.5f) {
+				RobotTalking = true;
+			}
+			//QUESTIONS APPEAR
+			if (xPos >= 0.66f && xPos <= 0.98f && yPos >= -0.3f && yPos <= 0.3f) {
+				displayQuestions = true;
+			}
+			//QUESTIONS DISSAPPEAR
+			if (xPos >= 0.4f && xPos <= 0.5f && yPos >= 0.56f && yPos <= 0.58f) {
+				displayQuestions = false;
+				right1 = false;
+				false1 = false;
+				right2 = false;
+				false2 = false;
+				right3 = false;
+				false3 = false;
+				displayRobotRightAnswer = false;
+				displayRobotFalseAnswer = false;
+			}
+			////ADDS INFO
+			//if (xPos >= -1.0f && xPos <= -0.6f && yPos >= -0.2f && yPos <= 0.5f) {
+			//	displayAddInfo = true;
+			//}
+			//WAITER INFO
+			if (xPos >= 0.22f && xPos <= 0.6f && yPos >= 0.55f && yPos <= 0.6f) {
+				displayWaiter = true;
+			}
+			//TEACHER INFO
+			if (xPos >= -0.13f && xPos <= 0.17f && yPos >= 0.55f && yPos <= 0.6f) {
+				displayTeacher = true;
+			}
+			//DOCTOR INFO
+			if (xPos >= -0.53f && xPos <= -0.3f && yPos >= 0.55f && yPos <= 0.6f) {
+				displayDoctor = true;
+			}
+
+
+
+
+		}
+		else if (state == GLUT_UP) {
+			displayCarInfo = false; // Reset the flag to stop drawing the triangle
+			displayFlyMInfo = false;
+			//displayAddInfo = false;
+			displayWaiter = false;
+			displayTeacher = false;
+			displayDoctor = false;
+			displayFcarInfo = false;
+
+		}
+	}
+
+	glutPostRedisplay();
+}
+
+static
+void motion(int x, int y)
+{}
+
+static void play(void)
+{
+	glutPostRedisplay();
+}
+
+static
+void key(unsigned char keyPressed, int x, int y) // key handling
+{
+	switch (keyPressed)
+	{
+	case 'q':
+	case 27:
+		exit(0);
+		break;
+
+	case 'e':      
+		easy = true;
+		break;   
+
+	case 'E':
+		easy = true;
+		break;
+
+	case 'h':    
+		hard = true;
+		easy = false;
+		break;   
+
+	case 'H':
+		hard = true;
+		easy = false;
+		break;
+
+	case '2':
+		right1 = true;
+		score = score + 1;
+		break;
+
+	case '1':
+	    false1 = true;
+		break;
+
+	case '3':
+		right2 = true;
+		score = score + 1;
+		break;
+
+	case '4':
+		false2 = true;
+		break;
+
+	case '5':
+		right3 = true;
+		score = score + 1;
+		break;
+
+	case '0':
+		displayMenu = true;
+		easy = false;
+		hard = false;
+		clothes = false;
+		break;
+
+	case '6':
+		false3 = true;
+		break;
+
+	case 'c':
+		clothes= true;
+		easy = false;
+		hard = false;
+		displayMenu = false;
+		break;
+
+	case 'C':
+		clothes = true;
+		easy = false;
+		hard = false;
+		displayMenu = false;
+		break;
+
+	case 'w'://watch
+		transValue1 = -0.75;  // Set the x-translation
+		transValue2 = -0.25;  // Set the y-translation
+		//cout << "Translating to: (" << transValue1 << ", " << transValue2 << ")" << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'W'://watch
+		transValue1 = -0.75;  // Set the x-translation
+		transValue2 = -0.25;  // Set the y-translation
+		//cout << "Translating to: (" << transValue1 << ", " << transValue2 << ")" << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case'U':
+	case 'u'://uniform
+		transValue3 = -0.92;  // Set the x-translation
+		transValue4 = 0.29;  // Set the y-translation 
+		scaleValue = 1.6;  // Set the scale for the uniform
+		//cout << "Scaling to: " << scaleValue << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'D':
+	case 'd'://cloud shirt
+		transValue5 = -1.96;  // Set the x-translation 
+		transValue6 = 0.29;  // Set the y-translation
+		scaleValue1 = 1.7;  // Set the scale 
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'F':
+	case 'f'://F();
+		transValue7 = -1.96;  // Set the x-translation
+		transValue8 = 0.29;  // Set the y-translation
+		scaleValue2 = 1.7;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'M':
+	case 'm'://mask
+		transValue9 = -1.8;  // Set the x-translation 
+		transValue10 = 0.1;  // Set the y-translation 
+		scaleValue3 = 1.7;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'T':
+	case 't'://hat
+		transValue11 = -1.8;  // Set the x-translation 
+		transValue12 = -0.22;  // Set the y-translation 
+		scaleValue4 = 1.7;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'R':
+	case 'r'://dress
+		transValue13 = -1.4;  // Set the x-translation 
+		transValue14 = 0.29;  // Set the y-translation 
+		scaleValue5 = 1.7;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'B':
+	case 'b'://bag
+		transValue15 = -0.66;  // Set the x-translation 
+		transValue16 = -0.64;  // Set the y-translation 
+		scaleValue6 = 1.0;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'S':
+	case 's'://stick
+		transValue17 = -0.8;  // Set the x-translation 
+		transValue18 = -0.64;  // Set the y-translation
+		scaleValue7 = 1.0;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'N':
+	case 'n'://note
+		transValue19 = -0.4;  // Set the x-translation 
+		transValue20 = -0.45;  // Set the y-translation 
+		scaleValue8 = 1.0;  // Set the scale for T()
+		//cout << "Scaling to: " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'I':
+	case 'i'://tshirt
+		transValue21 = -0.8;  // Set the x-translation 
+		transValue22 = -1.1;  // Set the y-translation 
+		scaleValue9 = 2.0;  // Set the scale for the uniform
+		cout << " "  << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'G':
+	case 'g'://glasses
+		transValue23 = -1.1;  // Set the x-translation
+		transValue24 = -0.42;  // Set the y-translation 
+		scaleValue10 = 1.7;  // Set the scale for T()
+		cout << " " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	case 'O':
+	case 'o'://sunglasses
+		transValue25 = -0.8;  // Set the x-translation 
+		transValue26 = -0.42;  // Set the y-translation 
+		scaleValue11 = 1.7;  // Set the scale for T()
+		cout << " " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+		
+	case 'P':
+	case 'p'://party
+		transValue27 = -1.44;  // Set the x-translation 
+		transValue28 = -0.24;  // Set the y-translation 
+		scaleValue12 = 1.7;  // Set the scale for T()
+		cout << " " << scaleValue1 << endl;
+		glutPostRedisplay();  // Trigger a redisplay to update the rendering
+		break;
+
+	default:
+		fprintf(stderr, "");
+		break;
+	}
+}
+
+void init() {
+
+	/////////////////////////////////////////------- Texture ---------
+	myTexture1 = LoadTexture(image1Path, 512, 512);
+
+	if (myTexture1 == -1)
+	{
+		cout << "Error in loading the texture" << endl;
+	}
+	else
+		cout << "AI DREAM GAME: " << endl;
+
+	///////////////////////////////////////////////////////////////////
+	myTexture2 = LoadTexture(image2Path, 1024, 1024);
+
+	if (myTexture2 == -1)
+	{
+		cout << "Error in loading the texture" << endl;
+	}
+	else
+		cout << "\nKeyboard commands:\n\n"
+			"E&e ------> easy  \n"
+			"H&h ------> hard \n"
+			"C&c ------> clothes \n"
+			"0------> Back to main\n"
+			"W&w----> watch  \n"
+			"U&u ----> uniform\n"
+			"D&d -----> cloud shirt \n"
+			"P&p -----> party hat\n"
+			"M&m ----> mask  \n"
+			"T&t -----> hat \n"
+			"R&r----> dresses  \n"
+			"B&b ----> bag \n"
+			"S&s -----> stick \n"
+			"N&n ----> note\n"
+			"I&i ----> t-shirt  \n"
+			"G&g -----> glass \n"
+			"O&o -----> sunglasses  \n"
+		"F&f -----> flower\n" << endl;
+	///////////////////////////////////////////////////////////////////
+	myTexture3 = LoadTexture(image3Path, 1024, 1024);
+
+	if (myTexture3 == -1)
+	{
+		cout << "Error in loading the texture" << endl;
+	}
+	else
+		cout << " " << endl;
+	///////////////////////////////////////////////////////////////////
+	myTexture4 = LoadTexture(image4Path, 1024, 1024);
+
+	if (myTexture4 == -1)
+	{
+		cout << "Error in loading the texture" << endl;
+	}
+	else
+		cout << "" << endl;
+	///////////////////////////////////////////////////////////////////
+
+	/*myTexture5 = LoadTexture(image5Path, 800, 2000);
+
+	if (myTexture5 == -1)
+	{
+		cout << "Error in loading the texture" << endl;
+	}
+	else
+		cout << "" << endl;*/
+
+
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set background color to black and opaque
+	// glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//glMatrixMode(GL_PROJECTION);
+
+	// Exercise 1
+	//gluOrtho2D(-1, 1, -1, 1);
+	//gluOrtho2D(-0.4, 0.4, -0.4, 0.4);
+	//gluOrtho2D(-3.0, 3.0, -3.0, 3.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void reshapeFunc(GLint new_width, GLint new_hight)
+{
+	glViewport(0, 0, new_width, new_hight);
+	win_width = new_width;
+	win_hight = new_hight;
+
+}
+
+void display()
+{
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glEnable(GL_BLEND);
+	//glEnable(GL_TEXTURE_2D);
+
+	if (displayMenu) {
+		work();
+		lable();
+		board();
+		putton();
+		boardputton();
+		back();
+	}
+
+
+	if (easy) {                             ///////////////////////////////////////////////////////////////////easy 
+
+		displayMenu = false;
+
+		// DISPLAY THE ROOM
+		drawRoom();
+		instructionsBoard();
+		//adsBoard();
+
+		//floor stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture1);
+		glBegin(GL_QUADS);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(0, 0);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(1, 0);
+		glVertex2f(1.0f, -0.66f); glTexCoord2f(1, 1);
+		glVertex2f(-1.0f, -0.66f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//front wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture2);
+		glBegin(GL_QUADS);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(0, 0);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(1, 0);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(1, 1);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//roof stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture2);
+		glBegin(GL_QUADS);
+		glVertex2f(-1.0f, 0.7f); glTexCoord2f(0, 0);
+		glVertex2f(1.f, 0.7f); glTexCoord2f(1, 0);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(1, 1);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
+		//right wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture2);
+		glBegin(GL_QUADS);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(0, 0);
+		glVertex2f(1.0f, 0.7f); glTexCoord2f(1, 0);
+		glVertex2f(1.0f, -0.66f); glTexCoord2f(1, 1);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//left wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture2);
+		glBegin(GL_QUADS);
+		glVertex2f(-1.0f, 0.7f); glTexCoord2f(0, 0);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(1, 0);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(1, 1);
+		glVertex2f(-1.0f, -0.66f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		roomLines();
+
+		//QUIZ BOARD 
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture4);
+		glBegin(GL_QUADS);
+		glVertex2f(0.66f, 0.3f); glTexCoord2f(0, 0);
+		glVertex2f(0.98f, 0.22f); glTexCoord2f(1, 0);
+		glVertex2f(0.98f, -0.17f); glTexCoord2f(1, 1);
+		glVertex2f(0.66f, -0.02f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
+		drawScore();
+
+
+		if (RobotTalking == false) {
+			//DISPLAY THE ROBOT
+			glPushMatrix();
+			glTranslatef(0.8, 0.5, 0.0); //x,y,z
+			//glScalef(0.5, 0.5, 1.0);
+			//RobotFace();
+			robotCall();
+			glPopMatrix();
+			//RobotTalk();
+		}
+
+		//BOARDS
+		//instructionsBoard();
+		//adsBoard();
+
+		// DISPLAY THE CAR
+		glPushMatrix();
+		glTranslatef(0.3, -0.1, 0.0); //x,y,z
+		glScalef(0.8, 0.8, 1.0);
+		car();
+		glPopMatrix();
+		glPopMatrix();
+
+
+		//// DISPLAY THE FlyM
+		glPushMatrix();
+		glTranslatef(-0.4, 0.1, 0.0); //x,y,z
+		glScalef(0.7, 0.7, 1.0);
+		FlyM();  // Lab 2 - Exercise
+		glPopMatrix();
+
+		//DISPLAY THE FLYING CAR
+		glPushMatrix();
+		glTranslatef(-0.4, -0.37, 0.0); //x,y,z
+		glScalef(0.7, 0.7, 1.0);
+		Fcar1();
+		glPopMatrix();
+		//Fcar2();
+		//Fcar3();
+	    //Fcar4();
+		
+
+
+		//DISPLAY ROBOT TALK
+		if (RobotTalking) {
+			//DISPLAY THE ROBOT
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			RobotTalk();
+		}
+
+
+		//DISPLAY CAR INFO
+		if (displayCarInfo) {
+			carInfo();
+		}
+
+		//DISPLAY FlyM INFO
+		if (displayFlyMInfo) {
+			FlyMInfo();
+		}
+
+		//DISPLAY FLYING CAR INFO
+		if (displayFcarInfo) {
+			FcarInfo();
+		}
+
+
+		//DISPLAY QUESTIONS
+		if (displayQuestions) {
+			question();
+		}
+
+		////DISPLAY ADD INFO
+		//if (displayAddInfo) {
+		//	adsBoardInfo();
+		//}
+
+
+		//RIGHT 1
+		if (right1) {
+			glPushMatrix();
+			glTranslatef(-0.4, -0.13, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+
+
+		}
+
+		//FALSE 1
+		if (false1) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.13, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//RIGHT 2
+		if (right2) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.42, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+
+
+		}
+
+		//FALSE 2
+		if (false2) {
+			glPushMatrix();
+			glTranslatef(-0.42, -0.42, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//RIGHT 3
+		if (right3) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.82, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+		}
+
+		//FALSE 3
+		if (false3) {
+			glPushMatrix();
+			glTranslatef(-0.42, -0.82, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//ROBOT REACT TO RIGHT & FALSE ANSWER 
+		if (displayRobotRightAnswer) {
+			RobotRightAnswer();
+		}
+
+		if (displayRobotFalseAnswer) {
+			RobotFalseAnswer();
+		}
+
+	} //EASY
+
+
+	if (hard) {                        ///////////////////////////////////////////////////////////////////hard
+
+		displayMenu = false;
+
+		// DISPLAY THE ROOM
+		drawRoom();
+		instructionsBoard();
+		//adsBoard();
+
+		//floor stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture1);
+		glBegin(GL_QUADS);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(0, 0);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(1, 0);
+		glVertex2f(1.0f, -0.66f); glTexCoord2f(1, 1);
+		glVertex2f(-1.0f, -0.66f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//front wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture3);
+		glBegin(GL_QUADS);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(0, 0);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(1, 0);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(1, 1);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//roof stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture3);
+		glBegin(GL_QUADS);
+		glVertex2f(-1.0f, 0.7f); glTexCoord2f(0, 0);
+		glVertex2f(1.f, 0.7f); glTexCoord2f(1, 0);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(1, 1);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
+		//right wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture3);
+		glBegin(GL_QUADS);
+		glVertex2f(0.64f, 0.55f); glTexCoord2f(0, 0);
+		glVertex2f(1.0f, 0.7f); glTexCoord2f(1, 0);
+		glVertex2f(1.0f, -0.66f); glTexCoord2f(1, 1);
+		glVertex2f(0.64f, -0.3f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		//left wall stx
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture3);
+		glBegin(GL_QUADS);
+		glVertex2f(-1.0f, 0.7f); glTexCoord2f(0, 0);
+		glVertex2f(-0.64f, 0.55f); glTexCoord2f(1, 0);
+		glVertex2f(-0.64f, -0.3f); glTexCoord2f(1, 1);
+		glVertex2f(-1.0f, -0.66f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		roomLines();
+
+		//QUIZ BOARD 
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, myTexture4);
+		glBegin(GL_QUADS);
+		glVertex2f(0.66f, 0.3f); glTexCoord2f(0, 0);
+		glVertex2f(0.98f, 0.22f); glTexCoord2f(1, 0);
+		glVertex2f(0.98f, -0.17f); glTexCoord2f(1, 1);
+		glVertex2f(0.66f, -0.02f); glTexCoord2f(0, 1);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
+		drawScore();
+
+
+		if (RobotTalking == false) {
+			//DISPLAY THE ROBOT
+			glPushMatrix();
+			glTranslatef(0.8, 0.5, 0.0); //x,y,z
+			//glScalef(0.5, 0.5, 1.0);
+			//RobotFace();
+			robotCall();
+			glPopMatrix();
+			//RobotTalk();
+		}
+
+		//BOARDS
+		//instructionsBoard();
+		//adsBoard();
+
+		// DISPLAY THE WAITER
+
+		glPushMatrix();
+		glTranslatef(0.05, -0.0, 0.0);
+		JobW();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.4, -0.1, 0.0); //x,y,z
+		glScalef(0.5, 0.5, 1.0);
+		waiter();
+		glPopMatrix();
+		glPopMatrix();
+
+
+		//// DISPLAY THE TEACHER
+
+		glPushMatrix();
+		glTranslatef(-0.33, -0.0, 0.0);
+		JobT();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(-0.0, -0.1, 0.0); //x,y,z
+		glScalef(0.5, 0.5, 1.0);
+		teacher();  // Lab 2 - Exercise
+		glPopMatrix();
+
+		//// DISPLAY THE DOCTOR
+
+		glPushMatrix();
+		glTranslatef(-0.75, -0.0, 0.0);
+		JobD();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(-0.4, -0.1, 0.0); //x,y,z
+		glScalef(0.5, 0.5, 1.0);
+		doctor();  // Lab 2 - Exercise
+		glPopMatrix();
+
+
+		//DISPLAY WAITER INFO
+		if (displayWaiter) {
+			waiterInfo();
+		}
+
+		//DISPLAY TEACHER INFO
+		if (displayTeacher) {
+			teacherInfo();
+		}
+
+		//DISPLAY DOCTOR INFO
+		if (displayDoctor) {
+			doctorInfo();
+		}
+
+
+		//DISPLAY ROBOT TALK
+		if (RobotTalking) {
+			//DISPLAY THE ROBOT
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			RobotTalk1();
+		}
+
+		//if (RobotTalking == false) {
+		//	//DISPLAY THE ROBOT
+		//	glPushMatrix();
+		//	glTranslatef(0.7, 0.2, 0.0); //x,y,z
+		//	glScalef(0.5, 0.5, 1.0);
+		//	RobotFace();
+		//	glPopMatrix();
+		//	glPopMatrix();
+
+		//	//RobotTalk();
+		//}
+
+
+
+		//DISPLAY QUESTIONS
+		if (displayQuestions) {
+			question1();
+		}
+
+		////DISPLAY ADD INFO
+		//if (displayAddInfo) {
+		//	adsBoardInfo();
+		//}
+
+
+		//RIGHT 1
+		if (right1) {
+			glPushMatrix();
+			glTranslatef(-0.4, -0.13, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+
+
+		}
+
+		//FALSE 1
+		if (false1) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.13, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//RIGHT 2
+		if (right2) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.42, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+
+
+		}
+
+		//FALSE 2
+		if (false2) {
+			glPushMatrix();
+			glTranslatef(-0.42, -0.42, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//RIGHT 3
+		if (right3) {
+			glPushMatrix();
+			glTranslatef(-0.78, -0.82, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			rightAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = true;
+			displayRobotFalseAnswer = false;
+		}
+
+		//FALSE 3
+		if (false3) {
+			glPushMatrix();
+			glTranslatef(-0.42, -0.82, 0.0);
+			glScalef(0.8, 0.8, 1.0);
+			falseAnswer();
+			glPopMatrix();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(0.6, -0.3, 0.0); //x,y,z
+			glScalef(0.6, 0.6, 1.0);
+			workSpace();
+			glPopMatrix();
+			glPopMatrix();
+
+			displayRobotRightAnswer = false;
+			displayRobotFalseAnswer = right;
+
+		}
+
+		//ROBOT REACT TO RIGHT & FALSE ANSWER 
+		if (displayRobotRightAnswer) {
+			RobotRightAnswer();
+		}
+
+		if (displayRobotFalseAnswer) {
+			RobotFalseAnswer();
+		}
+
+	}// hard
+
+
+
+	if (clothes) {                              ////////////////////////////////////////////////////////////////dressing room
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   // Clear the color buffer
+
+		roof();
+		wall3();
+		floor();
+		wall1();
+		wall2();
+		wallbreak();
+		closet();
+		outcloset();
+		outcloset2();
+		outcloset3();
+		outcloset4();
+		outcloset5();
+		cline();
+		drawShelf();
+
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glPushMatrix();
+		glTranslatef(-0.6f, -0.2f, 0.5f);
+		glScalef(0.6, 0.6, 0.6);
+		robot();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue1, transValue2, 0.5f);
+		handWatch();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue3, transValue4, 0.5f);  // Apply the first translation
+		glScalef(scaleValue, scaleValue, 1.0f);
+		uniform();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue5, transValue6, 0.5f);  // Apply the second translation
+		glScalef(scaleValue1, scaleValue1, 1.0f);
+		T();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue7, transValue8, 0.5f);  // Apply the second translation
+		glScalef(scaleValue2, scaleValue2, 1.0f); // Apply the second scaling transformation
+		F();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue9, transValue10, 0.5f);  // Apply the second translation
+		glScalef(scaleValue3, scaleValue3, 1.0f); // Apply the second scaling transformation
+		mask();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue11, transValue12, 0.5f);  // Apply the second translation
+		glScalef(scaleValue4, scaleValue4, 1.0f); // Apply the second scaling transformation
+		hat();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue13, transValue14, 0.5f);  // Apply the second translation
+		glScalef(scaleValue5, scaleValue5, 1.0f); // Apply the second scaling transformation
+		dress();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue15, transValue16, 0.5f);  // Apply the second translation
+		glScalef(scaleValue6, scaleValue6, 1.0f); // Apply the second scaling transformation
+		Bag();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue17, transValue18, 0.5f);  // Apply the second translation
+		glScalef(scaleValue7, scaleValue7, 1.0f); // Apply the second scaling transformation
+		Stick();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue19, transValue20, 0.5f);  // Apply the second translation
+		glScalef(scaleValue8, scaleValue8, 1.0f); // Apply the second scaling transformation
+		Note();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue21, transValue22, 0.5f);  // Apply the first translation
+		glScalef(scaleValue9, scaleValue9, 1.0f); // Apply the first scaling transformation
+		TShirt();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(transValue23, transValue24, 0.5f);  // Apply the first translation
+		glScalef(scaleValue10, scaleValue10, 1.0f); // Apply the first scaling transformation
+		Glasses();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue25, transValue26, 0.5f);  // Apply the first translation
+		glScalef(scaleValue11, scaleValue11, 1.0f); // Apply the first scaling transformation
+		SunGlasses();
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glTranslatef(transValue27, transValue28, 0.5f);  // Apply the first translation
+		glScalef(scaleValue12, scaleValue12, 1.0f); // Apply the first scaling transformation
+		party();
+		glPopMatrix();
+
+	}
+
+	glFlush();
+	glutSwapBuffers();
+
+}
+
+int main(int argc, char** argv)
+{
+
+	glutInit(&argc, argv);               		  // Initialize GLUT
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);   //  Specify the display Mode ñ RGB, RGBA or color 				              //  Index, single or double Buffer
+	glutInitWindowSize(700, 900);  		 // Set the window's initial width & height
+	glutInitWindowPosition(50, 50); 		 // Position the window's initial top-left corner
+	glutCreateWindow(" AI DREAM ESCAPE ROOM ");    // Create a window with the given title
+	init();
+
+	transValue = 0.0;
+	scaleValue = 1.0;
+
+	scaleValue12 = 1.0;
+	scaleValue11 = 1.0;
+	scaleValue10 = 1.0;
+	scaleValue9 = 1.0;
+	scaleValue8 = 1.0;
+	scaleValue7 = 1.0;
+	scaleValue6 = 1.0;
+	scaleValue5 = 1.0;
+	scaleValue4 = 1.0;
+	scaleValue3 = 1.0;
+	scaleValue2 = 1.0;
+	scaleValue = 1.0;
+	scaleValue1 = 1.0;
+
+	//cout << "The new translate value is " << transValue << endl;
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //s
+
+	glutIdleFunc(play);
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshapeFunc);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
+	glutKeyboardFunc(key);
+	glutSpecialFunc(special);
+
+	glutMainLoop();           		// Enter the infinitely event-processing loop
+
+	return 0;
+}
+
